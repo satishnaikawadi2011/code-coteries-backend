@@ -11,24 +11,24 @@ export class Profile {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	website: string;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	company: string;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	location: string;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	bio: string;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	github: string;
 
 	@Field()
@@ -47,7 +47,7 @@ export class Profile {
 	@OneToMany(() => Education, (education) => education.profile)
 	education: Education[];
 
-	@Field((type) => Social)
+	@Field((type) => Social, { nullable: true })
 	@OneToOne(() => Social)
 	@JoinColumn()
 	social: Social;

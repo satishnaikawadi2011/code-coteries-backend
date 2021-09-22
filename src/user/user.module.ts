@@ -8,6 +8,7 @@ import { Social } from './entities/social.entity';
 import { Experience } from './entities/experience.entity';
 import { Education } from './entities/education.entity';
 import { Profile } from './entities/profile.entity';
+import { AuthService } from './auth.service';
 
 @Module({
 	imports:
@@ -27,7 +28,8 @@ import { Profile } from './entities/profile.entity';
 	providers:
 		[
 			UserService,
-			UserResolver
+			UserResolver,
+			AuthService
 		],
 	exports:
 		[

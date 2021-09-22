@@ -8,23 +8,23 @@ export class Social {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	youtube: string;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	facebook: string;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	instagram: string;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	twitter: string;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	linkedin: string;
 }

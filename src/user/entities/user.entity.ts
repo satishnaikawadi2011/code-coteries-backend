@@ -29,7 +29,7 @@ export class User {
 	@Column() password: string;
 
 	@Field()
-	@Column()
+	@Column({ default: false })
 	is_active: boolean;
 
 	@Field()
@@ -40,7 +40,7 @@ export class User {
 	@UpdateDateColumn()
 	updated_at: Date;
 
-	@Field((type) => Profile)
+	@Field((type) => Profile, { nullable: true })
 	@OneToOne(() => Profile)
 	@JoinColumn()
 	profile: Profile;

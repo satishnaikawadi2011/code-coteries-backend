@@ -21,8 +21,8 @@ export class Education {
 	@Column()
 	from: Date;
 
-	@Field()
-	@Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
 	to: Date;
 
 	@Field()

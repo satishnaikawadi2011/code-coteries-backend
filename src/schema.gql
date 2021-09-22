@@ -8,7 +8,7 @@ type Experience {
   company: String!
   location: String!
   from: DateTime!
-  to: DateTime!
+  to: DateTime
   current: Boolean!
   description: String!
   profile: Profile!
@@ -21,24 +21,24 @@ scalar DateTime
 
 type Social {
   id: String!
-  youtube: String!
-  facebook: String!
-  instagram: String!
-  twitter: String!
-  linkedin: String!
+  youtube: String
+  facebook: String
+  instagram: String
+  twitter: String
+  linkedin: String
 }
 
 type Profile {
   id: String!
-  website: String!
-  company: String!
-  location: String!
-  bio: String!
-  github: String!
+  website: String
+  company: String
+  location: String
+  bio: String
+  github: String
   image_url: String!
   experience: [Experience!]!
   education: [Education!]!
-  social: Social!
+  social: Social
 }
 
 type Education {
@@ -46,13 +46,44 @@ type Education {
   school: String!
   degree: String!
   from: DateTime!
-  to: DateTime!
+  to: DateTime
   current: Boolean!
   description: String!
   field: String!
   profile: Profile!
 }
 
+type User {
+  id: String!
+  username: String!
+  email: String!
+  is_active: Boolean!
+  created_at: DateTime!
+  updated_at: DateTime!
+  profile: Profile
+}
+
+type AuthResponse {
+  user: User!
+  token: String!
+}
+
 type Query {
   helloWorld: String!
+}
+
+type Mutation {
+  registerUser(createUserInput: CreateUserInput!): AuthResponse!
+  signinUser(signinUserInput: SigninUserInput!): AuthResponse!
+}
+
+input CreateUserInput {
+  username: String!
+  password: String!
+  email: String!
+}
+
+input SigninUserInput {
+  username: String!
+  password: String!
 }
