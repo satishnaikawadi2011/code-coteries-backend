@@ -1,4 +1,6 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { BadRequestException, UseGuards } from '@nestjs/common';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthService } from './auth.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './inputs/create-user.input';
@@ -10,9 +12,14 @@ import { UserService } from './user.service';
 export class UserResolver {
 	constructor(private usersService: UserService, private authService: AuthService) {}
 
-	@Query(() => String)
-	helloWorld() {
-		return 'Hello World !!!';
+	@Query((returns) => User)
+	@UseGuards(AuthGuard)
+	async me(@Context('userId') userId: string): Promise<User> {
+		const user = await this.usersService.findOne(userId);
+		if (!user) {
+			throw new BadRequestException('user with given id not found!');
+		}
+		return user;
 	}
 
 	@Mutation((returns) => AuthResponse)

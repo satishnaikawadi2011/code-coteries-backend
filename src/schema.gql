@@ -69,7 +69,7 @@ type AuthResponse {
 }
 
 type Query {
-  helloWorld: String!
+  me: User!
 }
 
 type Mutation {
