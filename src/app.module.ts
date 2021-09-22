@@ -4,6 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { Education } from './user/entities/education.entity';
+import { Experience } from './user/entities/experience.entity';
+import { Profile } from './user/entities/profile.entity';
+import { Social } from './user/entities/social.entity';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 
@@ -28,7 +32,11 @@ import { UserModule } from './user/user.module';
 				database: 'db.sqlite',
 				entities:
 					[
-						User
+						User,
+						Social,
+						Experience,
+						Education,
+						Profile
 					],
 				synchronize: true
 			}),

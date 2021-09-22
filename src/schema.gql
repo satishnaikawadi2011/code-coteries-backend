@@ -2,6 +2,57 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Experience {
+  id: String!
+  title: String!
+  company: String!
+  location: String!
+  from: DateTime!
+  to: DateTime!
+  current: Boolean!
+  description: String!
+  profile: Profile!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Social {
+  id: String!
+  youtube: String!
+  facebook: String!
+  instagram: String!
+  twitter: String!
+  linkedin: String!
+}
+
+type Profile {
+  id: String!
+  website: String!
+  company: String!
+  location: String!
+  bio: String!
+  github: String!
+  image_url: String!
+  experience: [Experience!]!
+  education: [Education!]!
+  social: Social!
+}
+
+type Education {
+  id: String!
+  school: String!
+  degree: String!
+  from: DateTime!
+  to: DateTime!
+  current: Boolean!
+  description: String!
+  field: String!
+  profile: Profile!
+}
+
 type Query {
   helloWorld: String!
 }

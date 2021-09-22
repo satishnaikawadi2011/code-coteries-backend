@@ -1,5 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	JoinColumn,
+	OneToOne,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn
+} from 'typeorm';
+import { Profile } from './profile.entity';
 
 @ObjectType()
 @Entity()
@@ -30,4 +39,9 @@ export class User {
 	@Field()
 	@UpdateDateColumn()
 	updated_at: Date;
+
+	@Field((type) => Profile)
+	@OneToOne(() => Profile)
+	@JoinColumn()
+	profile: Profile;
 }

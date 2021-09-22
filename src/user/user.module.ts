@@ -4,12 +4,20 @@ import { UserResolver } from './user.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { Social } from './entities/social.entity';
+import { Experience } from './entities/experience.entity';
+import { Education } from './entities/education.entity';
+import { Profile } from './entities/profile.entity';
 
 @Module({
 	imports:
 		[
 			TypeOrmModule.forFeature([
-				User
+				User,
+				Social,
+				Experience,
+				Education,
+				Profile
 			]),
 			JwtModule.register({
 				secret: 'thisismysecret',
