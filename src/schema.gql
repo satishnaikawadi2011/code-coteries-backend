@@ -61,6 +61,9 @@ type User {
   created_at: DateTime!
   updated_at: DateTime!
   profile: Profile
+  connections: [User!]
+  followingCount: Float!
+  followerCount: Float!
 }
 
 type AuthResponse {
@@ -70,11 +73,15 @@ type AuthResponse {
 
 type Query {
   me: User!
+  getMyFollowers: [User!]!
+  getMyFollowings: [User!]!
 }
 
 type Mutation {
   registerUser(createUserInput: CreateUserInput!): AuthResponse!
   signinUser(signinUserInput: SigninUserInput!): AuthResponse!
+  followUser(id: String!): User!
+  unfollowUser(id: String!): String!
 }
 
 input CreateUserInput {

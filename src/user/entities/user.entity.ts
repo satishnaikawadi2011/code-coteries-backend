@@ -4,6 +4,8 @@ import {
 	CreateDateColumn,
 	Entity,
 	JoinColumn,
+	JoinTable,
+	ManyToMany,
 	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
@@ -44,4 +46,18 @@ export class User {
 	@OneToOne(() => Profile)
 	@JoinColumn()
 	profile: Profile;
+
+	@Field(
+		(type) => [
+			User
+		],
+		{ nullable: true }
+	)
+	@ManyToMany(() => User, (user) => user.connections)
+	@JoinTable()
+	connections: User[];
+
+	@Field() followingCount: number;
+
+	@Field() followerCount: number;
 }
