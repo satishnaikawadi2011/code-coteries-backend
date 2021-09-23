@@ -36,8 +36,8 @@ type Profile {
   bio: String
   github: String
   image_url: String!
-  experience: [Experience!]!
-  education: [Education!]!
+  experience: [Experience!]
+  education: [Education!]
   social: Social
 }
 
@@ -80,6 +80,7 @@ type Query {
 type Mutation {
   registerUser(createUserInput: CreateUserInput!): AuthResponse!
   signinUser(signinUserInput: SigninUserInput!): AuthResponse!
+  editProfile(editProfileInput: EditProfileInput!): Profile!
   followUser(id: String!): User!
   unfollowUser(id: String!): String!
 }
@@ -93,4 +94,13 @@ input CreateUserInput {
 input SigninUserInput {
   username: String!
   password: String!
+}
+
+input EditProfileInput {
+  company: String
+  website: String
+  location: String
+  github: String
+  bio: String
+  image_url: String
 }

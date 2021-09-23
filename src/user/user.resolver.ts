@@ -2,15 +2,22 @@ import { BadRequestException, UseGuards } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Context, ResolveField, Parent, Int } from '@nestjs/graphql';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthService } from './auth.service';
+import { Profile } from './entities/profile.entity';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './inputs/create-user.input';
+import { EditProfileInput } from './inputs/edit-profile.input';
 import { SigninUserInput } from './inputs/signin-user.input';
+import { ProfileService } from './profile.service';
 import { AuthResponse } from './types/auth-response.type';
 import { UserService } from './user.service';
 
 @Resolver((of) => User)
 export class UserResolver {
-	constructor(private usersService: UserService, private authService: AuthService) {}
+	constructor(
+		private usersService: UserService,
+		private authService: AuthService,
+		private profileService: ProfileService
+	) {}
 
 	@Query((returns) => User)
 	@UseGuards(AuthGuard)
@@ -31,6 +38,30 @@ export class UserResolver {
 	@Mutation((returns) => AuthResponse)
 	async signinUser(@Args('signinUserInput') signinUserInput: SigninUserInput): Promise<AuthResponse> {
 		return this.authService.signin(signinUserInput);
+	}
+
+	@Mutation((returns) => Profile)
+	@UseGuards(AuthGuard)
+	async editProfile(
+		@Args('editProfileInput') editProfileInput: EditProfileInput,
+		@Context('userId') userId: string
+	): Promise<Profile> {
+		const user = await this.usersService.findOne(userId, {
+			relations:
+				[
+					'profile'
+				]
+		});
+		let profile;
+		if (!user.profile) {
+			profile = await this.profileService.create(editProfileInput);
+		}
+		else {
+			profile = await this.profileService.update(user.profile.id, editProfileInput);
+		}
+		user.profile = profile;
+		this.usersService.save(user);
+		return profile;
 	}
 
 	@Mutation((returns) => User)

@@ -35,15 +35,21 @@ export class Profile {
 	@Column({ default: 'https://res.cloudinary.com/dg2zkumuc/image/upload/v1597862391/slcwy3gm2gv6i3tn6n7d.png' })
 	image_url: string;
 
-	@Field((type) => [
-		Experience
-	])
+	@Field(
+		(type) => [
+			Experience
+		],
+		{ nullable: true }
+	)
 	@OneToMany(() => Experience, (experience) => experience.profile)
 	experience: Experience[];
 
-	@Field((type) => [
-		Education
-	])
+	@Field(
+		(type) => [
+			Education
+		],
+		{ nullable: true }
+	)
 	@OneToMany(() => Education, (education) => education.profile)
 	education: Education[];
 

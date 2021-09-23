@@ -9,6 +9,7 @@ import { Experience } from './entities/experience.entity';
 import { Education } from './entities/education.entity';
 import { Profile } from './entities/profile.entity';
 import { AuthService } from './auth.service';
+import { ProfileService } from './profile.service';
 
 @Module({
 	imports:
@@ -29,7 +30,8 @@ import { AuthService } from './auth.service';
 		[
 			UserService,
 			UserResolver,
-			AuthService
+			AuthService,
+			ProfileService
 		],
 	exports:
 		[
