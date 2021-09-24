@@ -36,4 +36,15 @@ export class ProfileService {
 		const savedProfile = await this.repo.save(profile);
 		return savedProfile;
 	}
+
+	async getEducationItems(id: string) {
+		const profile = await this.repo.findOne(id, {
+			relations:
+				[
+					'education'
+				]
+		});
+		console.log(profile);
+		return profile.education;
+	}
 }

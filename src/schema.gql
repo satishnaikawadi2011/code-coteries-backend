@@ -81,6 +81,7 @@ type Mutation {
   registerUser(createUserInput: CreateUserInput!): AuthResponse!
   signinUser(signinUserInput: SigninUserInput!): AuthResponse!
   editProfile(editProfileInput: EditProfileInput!): Profile!
+  addEducation(addEducationInput: AddEducationInput!): Education!
   followUser(id: String!): User!
   unfollowUser(id: String!): String!
 }
@@ -103,4 +104,14 @@ input EditProfileInput {
   github: String
   bio: String
   image_url: String
+}
+
+input AddEducationInput {
+  field: String!
+  school: String!
+  degree: String!
+  from: String!
+  to: String
+  current: Boolean = false
+  description: String!
 }

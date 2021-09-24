@@ -1,9 +1,12 @@
 import { BadRequestException, UseGuards } from '@nestjs/common';
-import { Resolver, Query, Mutation, Args, Context, ResolveField, Parent, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context, ResolveField, Parent, Int, ResolveProperty } from '@nestjs/graphql';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthService } from './auth.service';
+import { EducationService } from './education.service';
+import { Education } from './entities/education.entity';
 import { Profile } from './entities/profile.entity';
 import { User } from './entities/user.entity';
+import { AddEducationInput } from './inputs/add-education.input';
 import { CreateUserInput } from './inputs/create-user.input';
 import { EditProfileInput } from './inputs/edit-profile.input';
 import { SigninUserInput } from './inputs/signin-user.input';
@@ -16,7 +19,8 @@ export class UserResolver {
 	constructor(
 		private usersService: UserService,
 		private authService: AuthService,
-		private profileService: ProfileService
+		private profileService: ProfileService,
+		private educationService: EducationService
 	) {}
 
 	@Query((returns) => User)
@@ -62,6 +66,29 @@ export class UserResolver {
 		user.profile = profile;
 		this.usersService.save(user);
 		return profile;
+	}
+
+	@Mutation((returns) => Education)
+	@UseGuards(AuthGuard)
+	async addEducation(
+		@Args('addEducationInput') addEducationInput: AddEducationInput,
+		@Context('userId') userId: string
+	): Promise<Education> {
+		const user = await this.usersService.findOne(userId, {
+			relations:
+				[
+					'profile'
+				]
+		});
+		if (!user.profile) {
+			throw new BadRequestException('First create profile and then add education items !!');
+		}
+		const education = await this.educationService.create(addEducationInput);
+		user.profile.education = [
+			education
+		];
+		this.profileService.save(user.profile);
+		return education;
 	}
 
 	@Mutation((returns) => User)
@@ -146,5 +173,10 @@ export class UserResolver {
 	@ResolveField((returns) => Int)
 	followingCount(@Parent() user: User): Promise<number> {
 		return this.usersService.getFollowingCount(user.id);
+	}
+
+	@ResolveField((returns) => Profile)
+	profile(@Parent() user: User): Promise<Profile> {
+		return this.usersService.getMyProfile(user.id);
 	}
 }

@@ -10,6 +10,8 @@ import { Education } from './entities/education.entity';
 import { Profile } from './entities/profile.entity';
 import { AuthService } from './auth.service';
 import { ProfileService } from './profile.service';
+import { EducationService } from './education.service';
+import { ProfileResolver } from './profile.resolver';
 
 @Module({
 	imports:
@@ -31,7 +33,9 @@ import { ProfileService } from './profile.service';
 			UserService,
 			UserResolver,
 			AuthService,
-			ProfileService
+			ProfileService,
+			EducationService,
+			ProfileResolver
 		],
 	exports:
 		[

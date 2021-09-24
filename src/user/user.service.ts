@@ -123,4 +123,14 @@ export class UserService {
 
 		return followings;
 	}
+
+	async getMyProfile(id: string) {
+		const user = await this.findOne(id, {
+			relations:
+				[
+					'profile'
+				]
+		});
+		return user.profile;
+	}
 }

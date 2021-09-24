@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { IsOptional, IsString, IsUrl } from 'class-validator';
 
 @InputType()
 export class EditProfileInput {
