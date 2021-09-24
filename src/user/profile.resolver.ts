@@ -10,6 +10,7 @@ import { EditEducationInput } from './inputs/edit-education.input';
 import { Experience } from './entities/experience.entity';
 import { AddExperienceInput } from './inputs/add-experience.input';
 import { ExperienceService } from './experience.service';
+import { EditExperienceInput } from './inputs/edit-experience.input';
 
 @Resolver((of) => Profile)
 export class ProfileResolver {
@@ -97,6 +98,56 @@ export class ProfileResolver {
 		}
 		this.profileService.save(user.profile);
 		return experience;
+	}
+
+	@Mutation((returns) => Experience)
+	@UseGuards(AuthGuard)
+	async editExperience(
+		@Args('id') id: string,
+		@Args('editExperienceInput') editExperienceInput: EditExperienceInput,
+		@Context('userId') userId: string
+	): Promise<Experience> {
+		const user = await this.usersService.findOne(userId, {
+			relations:
+				[
+					'profile',
+					'profile.experience'
+				]
+		});
+		if (!user.profile || !user.profile.experience) {
+			throw new BadGatewayException('You are not allowed to edit this experience !');
+		}
+		else {
+			const isMyExp = await this.experienceService.isMyExperience(user.profile.id, id);
+			if (!isMyExp) {
+				throw new BadGatewayException('You are not allowed to edit this experience !');
+			}
+		}
+		const updatedExp = await this.experienceService.update(id, editExperienceInput);
+		return updatedExp;
+	}
+
+	@Mutation((returns) => String)
+	@UseGuards(AuthGuard)
+	async removeExperience(@Args('id') id: string, @Context('userId') userId: string): Promise<string> {
+		const user = await this.usersService.findOne(userId, {
+			relations:
+				[
+					'profile',
+					'profile.experience'
+				]
+		});
+		if (!user.profile || !user.profile.experience) {
+			throw new BadGatewayException('You are not allowed to remove this experience !');
+		}
+		else {
+			const isMyExp = await this.experienceService.isMyExperience(user.profile.id, id);
+			if (!isMyExp) {
+				throw new BadGatewayException('You are not allowed to remove this experience !');
+			}
+		}
+		await this.experienceService.remove(id);
+		return 'Successfully deleted your experience.';
 	}
 
 	@ResolveField((returns) => [

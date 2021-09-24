@@ -87,6 +87,8 @@ type Mutation {
   editEducation(editEducationInput: EditEducationInput!, id: String!): Education!
   removeEducation(id: String!): String!
   addExperience(addExperienceInput: AddExperienceInput!): Experience!
+  editExperience(editExperienceInput: EditExperienceInput!, id: String!): Experience!
+  removeExperience(id: String!): String!
 }
 
 input CreateUserInput {
@@ -137,4 +139,14 @@ input AddExperienceInput {
   to: String
   current: Boolean = false
   description: String!
+}
+
+input EditExperienceInput {
+  title: String
+  company: String
+  location: String
+  from: String
+  to: String
+  current: Boolean = false
+  description: String
 }
