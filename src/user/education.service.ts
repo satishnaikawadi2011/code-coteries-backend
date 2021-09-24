@@ -58,4 +58,19 @@ export class EducationService {
 		const savedEducation = await this.repo.save(education);
 		return savedEducation;
 	}
+
+	async isMyEducation(profileId: string, id: string): Promise<boolean> {
+		const isMyEd = await this.runRawQuery(
+			`
+			SELECT * FROM education
+			WHERE id = ?
+			AND profileId = ?	
+		`,
+			[
+				id,
+				profileId
+			]
+		);
+		return isMyEd.length !== 0;
+	}
 }

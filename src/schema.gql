@@ -84,6 +84,7 @@ type Mutation {
   addEducation(addEducationInput: AddEducationInput!): Education!
   followUser(id: String!): User!
   unfollowUser(id: String!): String!
+  editEducation(editEducationInput: EditEducationInput!, id: String!): Education!
 }
 
 input CreateUserInput {
@@ -114,4 +115,14 @@ input AddEducationInput {
   to: String
   current: Boolean = false
   description: String!
+}
+
+input EditEducationInput {
+  field: String
+  school: String
+  degree: String
+  from: String
+  to: String
+  current: Boolean = false
+  description: String
 }

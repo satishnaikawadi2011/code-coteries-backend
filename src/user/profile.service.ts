@@ -44,7 +44,6 @@ export class ProfileService {
 					'education'
 				]
 		});
-		console.log(profile);
 		return profile.education;
 	}
 }
