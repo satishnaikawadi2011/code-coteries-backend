@@ -1,5 +1,5 @@
 import { AuthGuard } from './../guards/auth.guard';
-import { BadGatewayException, UseGuards } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { EducationService } from './education.service';
 import { Education } from './entities/education.entity';
@@ -7,13 +7,17 @@ import { Profile } from './entities/profile.entity';
 import { ProfileService } from './profile.service';
 import { UserService } from './user.service';
 import { EditEducationInput } from './inputs/edit-education.input';
+import { Experience } from './entities/experience.entity';
+import { AddExperienceInput } from './inputs/add-experience.input';
+import { ExperienceService } from './experience.service';
 
 @Resolver((of) => Profile)
 export class ProfileResolver {
 	constructor(
 		private usersService: UserService,
 		private profileService: ProfileService,
-		private educationService: EducationService
+		private educationService: EducationService,
+		private experienceService: ExperienceService
 	) {}
 
 	@Mutation((returns) => Education)
@@ -66,10 +70,46 @@ export class ProfileResolver {
 		return 'Successfully deleted your education.';
 	}
 
+	@Mutation((returns) => Experience)
+	@UseGuards(AuthGuard)
+	async addExperience(
+		@Args('addExperienceInput') addExperienceInput: AddExperienceInput,
+		@Context('userId') userId: string
+	): Promise<Experience> {
+		const user = await this.usersService.findOne(userId, {
+			relations:
+				[
+					'profile',
+					'profile.experience'
+				]
+		});
+		if (!user.profile) {
+			throw new BadRequestException('First create profile and then add experience items !!');
+		}
+		const experience = await this.experienceService.create(addExperienceInput);
+		if (!user.profile.experience) {
+			user.profile.experience = [
+				experience
+			];
+		}
+		else {
+			user.profile.experience.push(experience);
+		}
+		this.profileService.save(user.profile);
+		return experience;
+	}
+
 	@ResolveField((returns) => [
 		Education
 	])
 	education(@Parent() profile: Profile): Promise<Education[]> {
 		return this.profileService.getEducationItems(profile.id);
+	}
+
+	@ResolveField((returns) => [
+		Experience
+	])
+	experience(@Parent() profile: Profile): Promise<Experience[]> {
+		return this.profileService.getExperienceItems(profile.id);
 	}
 }

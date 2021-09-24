@@ -46,4 +46,14 @@ export class ProfileService {
 		});
 		return profile.education;
 	}
+
+	async getExperienceItems(id: string) {
+		const profile = await this.repo.findOne(id, {
+			relations:
+				[
+					'experience'
+				]
+		});
+		return profile.experience;
+	}
 }
