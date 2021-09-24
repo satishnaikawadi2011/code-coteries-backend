@@ -77,16 +77,22 @@ export class UserResolver {
 		const user = await this.usersService.findOne(userId, {
 			relations:
 				[
-					'profile'
+					'profile',
+					'profile.education'
 				]
 		});
 		if (!user.profile) {
 			throw new BadRequestException('First create profile and then add education items !!');
 		}
 		const education = await this.educationService.create(addEducationInput);
-		user.profile.education = [
-			education
-		];
+		if (!user.profile.education) {
+			user.profile.education = [
+				education
+			];
+		}
+		else {
+			user.profile.education.push(education);
+		}
 		this.profileService.save(user.profile);
 		return education;
 	}
@@ -109,15 +115,15 @@ export class UserResolver {
 
 		const otherUser = await this.usersService.findOne(userId);
 
-		if (me.connections)
-			if (!me.connections) {
-				me.connections = [
-					otherUser
-				];
-			}
-			else {
-				me.connections.push(otherUser);
-			}
+		// if (me.connections)
+		if (!me.connections) {
+			me.connections = [
+				otherUser
+			];
+		}
+		else {
+			me.connections.push(otherUser);
+		}
 		return this.usersService.save(me);
 	}
 
