@@ -85,6 +85,7 @@ type Mutation {
   followUser(id: String!): User!
   unfollowUser(id: String!): String!
   editEducation(editEducationInput: EditEducationInput!, id: String!): Education!
+  removeEducation(id: String!): String!
 }
 
 input CreateUserInput {

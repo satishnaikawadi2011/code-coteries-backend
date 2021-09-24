@@ -59,6 +59,15 @@ export class EducationService {
 		return savedEducation;
 	}
 
+	async remove(id: string) {
+		const edu = await this.findOne(id);
+		if (!edu) {
+			throw new NotFoundException('Education not found!');
+		}
+		await this.repo.remove(edu);
+		return;
+	}
+
 	async isMyEducation(profileId: string, id: string): Promise<boolean> {
 		const isMyEd = await this.runRawQuery(
 			`

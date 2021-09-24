@@ -43,6 +43,29 @@ export class ProfileResolver {
 		return updatedEd;
 	}
 
+	@Mutation((returns) => String)
+	@UseGuards(AuthGuard)
+	async removeEducation(@Args('id') id: string, @Context('userId') userId: string): Promise<string> {
+		const user = await this.usersService.findOne(userId, {
+			relations:
+				[
+					'profile',
+					'profile.education'
+				]
+		});
+		if (!user.profile || !user.profile.education) {
+			throw new BadGatewayException('You are not allowed to remove this education !');
+		}
+		else {
+			const isMyEd = await this.educationService.isMyEducation(user.profile.id, id);
+			if (!isMyEd) {
+				throw new BadGatewayException('You are not allowed to remove this education !');
+			}
+		}
+		await this.educationService.remove(id);
+		return 'Successfully deleted your education.';
+	}
+
 	@ResolveField((returns) => [
 		Education
 	])
