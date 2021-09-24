@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { ProfileService } from './profile.service';
 import { EducationService } from './education.service';
 import { ProfileResolver } from './profile.resolver';
+import { ExperienceService } from './experience.service';
 
 @Module({
 	imports:
@@ -35,6 +36,7 @@ import { ProfileResolver } from './profile.resolver';
 			AuthService,
 			ProfileService,
 			EducationService,
+			ExperienceService,
 			ProfileResolver
 		],
 	exports:
