@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Post } from '../../post/entities/post.entity';
 import {
 	Column,
 	CreateDateColumn,
@@ -6,6 +7,7 @@ import {
 	JoinColumn,
 	JoinTable,
 	ManyToMany,
+	OneToMany,
 	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
@@ -56,6 +58,15 @@ export class User {
 	@ManyToMany(() => User, (user) => user.connections)
 	@JoinTable()
 	connections: User[];
+
+	@Field(
+		(type) => [
+			Post
+		],
+		{ nullable: true }
+	)
+	@OneToMany(() => Post, (post) => post.user)
+	posts: Post[];
 
 	@Field() followingCount: number;
 

@@ -11,6 +11,7 @@ import { Social } from './user/entities/social.entity';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
+import { Post } from './post/entities/post.entity';
 
 @Module({
 	imports:
@@ -37,7 +38,8 @@ import { PostModule } from './post/post.module';
 						Social,
 						Experience,
 						Education,
-						Profile
+						Profile,
+						Post
 					],
 				synchronize: true
 			}),

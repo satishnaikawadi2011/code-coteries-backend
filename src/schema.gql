@@ -53,6 +53,15 @@ type Education {
   profile: Profile!
 }
 
+type Post {
+  id: String!
+  caption: String!
+  image_url: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  user: User!
+}
+
 type User {
   id: String!
   username: String!
@@ -62,6 +71,7 @@ type User {
   updated_at: DateTime!
   profile: Profile
   connections: [User!]
+  posts: [Post!]
   followingCount: Float!
   followerCount: Float!
 }
