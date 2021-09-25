@@ -13,6 +13,7 @@ import { ProfileService } from './profile.service';
 import { EducationService } from './education.service';
 import { ProfileResolver } from './profile.resolver';
 import { ExperienceService } from './experience.service';
+import { SocialService } from './social.service';
 
 @Module({
 	imports:
@@ -37,7 +38,8 @@ import { ExperienceService } from './experience.service';
 			ProfileService,
 			EducationService,
 			ExperienceService,
-			ProfileResolver
+			ProfileResolver,
+			SocialService
 		],
 	exports:
 		[

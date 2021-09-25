@@ -11,6 +11,9 @@ import { Experience } from './entities/experience.entity';
 import { AddExperienceInput } from './inputs/add-experience.input';
 import { ExperienceService } from './experience.service';
 import { EditExperienceInput } from './inputs/edit-experience.input';
+import { Social } from './entities/social.entity';
+import { EditSocialInput } from './inputs/edit-social.input';
+import { SocialService } from './social.service';
 
 @Resolver((of) => Profile)
 export class ProfileResolver {
@@ -18,7 +21,8 @@ export class ProfileResolver {
 		private usersService: UserService,
 		private profileService: ProfileService,
 		private educationService: EducationService,
-		private experienceService: ExperienceService
+		private experienceService: ExperienceService,
+		private socialService: SocialService
 	) {}
 
 	@Mutation((returns) => Education)
@@ -150,6 +154,36 @@ export class ProfileResolver {
 		return 'Successfully deleted your experience.';
 	}
 
+	@Mutation((returns) => Social)
+	@UseGuards(AuthGuard)
+	async editSocial(
+		@Args('editSocialInput') editSocialInput: EditSocialInput,
+		@Context('userId') userId: string
+	): Promise<Social> {
+		const user = await this.usersService.findOne(userId, {
+			relations:
+				[
+					'profile',
+					'profile.social'
+				]
+		});
+
+		if (!user.profile) {
+			throw new BadRequestException('First create profile and then add social links !!');
+		}
+
+		let social;
+		if (!user.profile.social) {
+			social = await this.socialService.create(editSocialInput);
+		}
+		else {
+			social = await this.socialService.update(user.profile.social.id, editSocialInput);
+		}
+		user.profile.social = social;
+		this.profileService.save(user.profile);
+		return social;
+	}
+
 	@ResolveField((returns) => [
 		Education
 	])
@@ -162,5 +196,10 @@ export class ProfileResolver {
 	])
 	experience(@Parent() profile: Profile): Promise<Experience[]> {
 		return this.profileService.getExperienceItems(profile.id);
+	}
+
+	@ResolveField((returns) => Social)
+	social(@Parent() profile: Profile): Promise<Social> {
+		return this.profileService.getSocials(profile.id);
 	}
 }

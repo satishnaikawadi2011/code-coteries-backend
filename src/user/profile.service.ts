@@ -56,4 +56,14 @@ export class ProfileService {
 		});
 		return profile.experience;
 	}
+
+	async getSocials(id: string) {
+		const profile = await this.repo.findOne(id, {
+			relations:
+				[
+					'social'
+				]
+		});
+		return profile.social;
+	}
 }
