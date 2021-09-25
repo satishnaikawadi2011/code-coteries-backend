@@ -10,6 +10,7 @@ import { Profile } from './user/entities/profile.entity';
 import { Social } from './user/entities/social.entity';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
+import { PostModule } from './post/post.module';
 
 @Module({
 	imports:
@@ -40,7 +41,8 @@ import { UserModule } from './user/user.module';
 					],
 				synchronize: true
 			}),
-			UserModule
+			UserModule,
+			PostModule
 		],
 	controllers:
 		[
