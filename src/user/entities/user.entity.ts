@@ -14,6 +14,8 @@ import {
 } from 'typeorm';
 import { Profile } from './profile.entity';
 import { Event } from 'src/event/entities/event.entity';
+import { PostComment } from 'src/comment/entities/post-comment.entity';
+import { EventComment } from 'src/comment/entities/event-comment.entity';
 
 @ObjectType()
 @Entity()
@@ -77,6 +79,24 @@ export class User {
 	)
 	@OneToMany(() => Post, (post) => post.user)
 	posts: Post[];
+
+	@Field(
+		(type) => [
+			PostComment
+		],
+		{ nullable: true }
+	)
+	@OneToMany(() => PostComment, (postComment) => postComment.user)
+	post_comments: PostComment[];
+
+	@Field(
+		(type) => [
+			EventComment
+		],
+		{ nullable: true }
+	)
+	@OneToMany(() => EventComment, (eventComment) => eventComment.user)
+	event_comments: EventComment[];
 
 	@Field() followingCount: number;
 

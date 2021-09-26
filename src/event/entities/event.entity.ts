@@ -6,9 +6,11 @@ import {
 	Entity,
 	JoinColumn,
 	ManyToOne,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm';
+import { EventComment } from 'src/comment/entities/event-comment.entity';
 
 @ObjectType()
 @Entity()
@@ -49,6 +51,16 @@ export class Event {
 	@ManyToOne(() => User, (user) => user.events)
 	@JoinColumn()
 	user: User;
+
+	@Field(
+		(type) => [
+			EventComment
+		],
+		{ nullable: true }
+	)
+	@OneToMany(() => EventComment, (comment) => comment.event)
+	@JoinColumn()
+	comments: EventComment[];
 
 	@Field((type) => [
 		String

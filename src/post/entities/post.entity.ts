@@ -6,9 +6,11 @@ import {
 	Entity,
 	JoinColumn,
 	ManyToOne,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm';
+import { PostComment } from 'src/comment/entities/post-comment.entity';
 
 @ObjectType()
 @Entity()
@@ -38,6 +40,16 @@ export class Post {
 	@JoinColumn()
 	user: User;
 
+	@Field(
+		(type) => [
+			PostComment
+		],
+		{ nullable: true }
+	)
+	@OneToMany(() => PostComment, (comment) => comment.post)
+	@JoinColumn()
+	comments: PostComment[];
+
 	@Field((type) => [
 		String
 	])
@@ -59,8 +71,4 @@ export class Post {
 	// @ManyToMany(() => User, (user) => user.connections)
 	// @JoinTable()
 	// connections: User[];
-
-	// @Field() followingCount: number;
-
-	// @Field() followerCount: number;
 }

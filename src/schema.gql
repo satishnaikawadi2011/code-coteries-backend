@@ -53,6 +53,18 @@ type Education {
   profile: Profile!
 }
 
+type PostComment {
+  id: String!
+  content: String!
+  handle: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  likes: [String!]!
+  likeCount: Float!
+  user: User!
+  post: Post!
+}
+
 type Post {
   id: String!
   caption: String!
@@ -60,9 +72,22 @@ type Post {
   created_at: DateTime!
   updated_at: DateTime!
   user: User!
+  comments: [PostComment!]
   likes: [String!]!
   handle: String!
   likeCount: Float!
+}
+
+type EventComment {
+  id: String!
+  content: String!
+  handle: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  likes: [String!]!
+  likeCount: Float!
+  user: User!
+  event: Event!
 }
 
 type Event {
@@ -75,6 +100,7 @@ type Event {
   event_date: String!
   updated_at: DateTime!
   user: User!
+  comments: [EventComment!]
   likes: [String!]!
   likeCount: Float!
 }
@@ -90,6 +116,8 @@ type User {
   connections: [User!]
   events: [Event!]
   posts: [Post!]
+  post_comments: [PostComment!]
+  event_comments: [EventComment!]
   followingCount: Float!
   followerCount: Float!
 }
