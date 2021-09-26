@@ -42,6 +42,11 @@ export class PostService {
 		return savedPost;
 	}
 
+	async getPostOwner(post: Post) {
+		const user = await this.userService.find({ username: post.handle });
+		return user[0];
+	}
+
 	//     async getAllPosts(skip = 0, take = 10): Promise<Post[]> {
 	//     try {
 	//       return await this.repo
@@ -57,18 +62,18 @@ export class PostService {
 	//   }
 
 	//   Get post by postId
-	//   async getPostById(id: string): Promise<Post> {
-	//     try {
-	//       const post = await this.repo
-	//         .createQueryBuilder('post')
-	//         .leftJoinAndSelect('post.replies', 'reply')
-	//         .where('post.id = :id', { id })
-	//         .getOne();
-	//       return post;
-	//     } catch (err) {
-	//       throw err;
-	//     }
-	//   }
+	async getPostById(id: string): Promise<Post> {
+		try {
+			const post = await this.repo
+				.createQueryBuilder('post')
+				// .leftJoinAndSelect('post.replies', 'reply')
+				.where('post.id = :id', { id })
+				.getOne();
+			return post;
+		} catch (err) {
+			throw err;
+		}
+	}
 
 	//   Get posts by handle; with pagination
 	//   async getPostsByHandle(handle: string, skip = 0, take = 10): Promise<Post[]> {

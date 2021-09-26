@@ -62,6 +62,7 @@ type Post {
   user: User!
   likes: [String!]!
   handle: String!
+  likeCount: Float!
 }
 
 type User {
@@ -87,6 +88,7 @@ type Query {
   me: User!
   getMyFollowers: [User!]!
   getMyFollowings: [User!]!
+  getPost(postId: String!): Post!
 }
 
 type Mutation {
@@ -103,6 +105,7 @@ type Mutation {
   removeExperience(id: String!): String!
   editSocial(editSocialInput: EditSocialInput!): Social!
   createPost(createPostInput: CreatePostInput!): Post!
+  likePost(postId: String!): Post!
 }
 
 input CreateUserInput {

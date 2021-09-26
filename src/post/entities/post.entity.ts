@@ -48,6 +48,8 @@ export class Post {
 	@Column()
 	handle: string;
 
+	@Field() likeCount: number;
+
 	// @Field(
 	// 	(type) => [
 	// 		User
