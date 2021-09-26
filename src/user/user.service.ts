@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Event } from 'src/event/entities/event.entity';
 import { Post } from 'src/post/entities/post.entity';
 import { Repository, getManager, FindOneOptions } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -135,10 +136,19 @@ export class UserService {
 		return user.profile;
 	}
 
-	// Save new post to porfile
+	// Save new post to user
 	async savePostToUser(id: string, post: Post): Promise<void> {
 		try {
 			await this.repo.createQueryBuilder().relation(User, 'posts').of(id).add(post);
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	// Save new event to user
+	async saveEventToUser(id: string, event: Event): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(User, 'events').of(id).add(event);
 		} catch (err) {
 			throw err;
 		}

@@ -104,6 +104,7 @@ type Query {
   getMyFollowers: [User!]!
   getMyFollowings: [User!]!
   getPost(postId: String!): Post!
+  getEvent(eventId: String!): Event!
 }
 
 type Mutation {
@@ -121,6 +122,8 @@ type Mutation {
   editSocial(editSocialInput: EditSocialInput!): Social!
   createPost(createPostInput: CreatePostInput!): Post!
   likePost(postId: String!): Post!
+  createEvent(addEventInput: AddEventInput!): Event!
+  likeEvent(eventId: String!): Event!
 }
 
 input CreateUserInput {
@@ -194,4 +197,12 @@ input EditSocialInput {
 input CreatePostInput {
   caption: String!
   image_url: String!
+}
+
+input AddEventInput {
+  title: String!
+  description: String!
+  image_url: String!
+  event_url: String!
+  event_date: String!
 }
