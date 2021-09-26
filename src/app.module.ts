@@ -14,6 +14,7 @@ import { PostModule } from './post/post.module';
 import { Post } from './post/entities/post.entity';
 import { EventModule } from './event/event.module';
 import { Event } from './event/entities/event.entity';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
 	imports:
@@ -48,7 +49,8 @@ import { Event } from './event/entities/event.entity';
 			}),
 			UserModule,
 			PostModule,
-			EventModule
+			EventModule,
+			CommentModule
 		],
 	controllers:
 		[
