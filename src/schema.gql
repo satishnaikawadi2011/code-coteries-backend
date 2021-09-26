@@ -60,6 +60,8 @@ type Post {
   created_at: DateTime!
   updated_at: DateTime!
   user: User!
+  likes: [String!]!
+  handle: String!
 }
 
 type User {
@@ -100,6 +102,7 @@ type Mutation {
   editExperience(editExperienceInput: EditExperienceInput!, id: String!): Experience!
   removeExperience(id: String!): String!
   editSocial(editSocialInput: EditSocialInput!): Social!
+  createPost(createPostInput: CreatePostInput!): Post!
 }
 
 input CreateUserInput {
@@ -168,4 +171,9 @@ input EditSocialInput {
   instagram: String
   facebook: String
   linkedin: String
+}
+
+input CreatePostInput {
+  caption: String!
+  image_url: String!
 }

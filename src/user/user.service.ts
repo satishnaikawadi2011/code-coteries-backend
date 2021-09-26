@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Post } from 'src/post/entities/post.entity';
 import { Repository, getManager, FindOneOptions } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './inputs/create-user.input';
@@ -132,5 +133,14 @@ export class UserService {
 				]
 		});
 		return user.profile;
+	}
+
+	// Save new post to porfile
+	async savePostToUser(id: string, post: Post): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(User, 'posts').of(id).add(post);
+		} catch (err) {
+			throw err;
+		}
 	}
 }
