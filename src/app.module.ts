@@ -12,6 +12,7 @@ import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { Post } from './post/entities/post.entity';
+import { EventModule } from './event/event.module';
 
 @Module({
 	imports:
@@ -44,7 +45,8 @@ import { Post } from './post/entities/post.entity';
 				synchronize: true
 			}),
 			UserModule,
-			PostModule
+			PostModule,
+			EventModule
 		],
 	controllers:
 		[
