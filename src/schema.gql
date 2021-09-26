@@ -65,6 +65,20 @@ type Post {
   likeCount: Float!
 }
 
+type Event {
+  id: String!
+  title: String!
+  description: String!
+  image_url: String!
+  event_url: String!
+  created_at: DateTime!
+  event_date: String!
+  updated_at: DateTime!
+  user: User!
+  likes: [String!]!
+  likeCount: Float!
+}
+
 type User {
   id: String!
   username: String!
@@ -74,6 +88,7 @@ type User {
   updated_at: DateTime!
   profile: Profile
   connections: [User!]
+  events: [Event!]
   posts: [Post!]
   followingCount: Float!
   followerCount: Float!

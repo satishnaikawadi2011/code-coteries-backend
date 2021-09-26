@@ -13,6 +13,7 @@ import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { Post } from './post/entities/post.entity';
 import { EventModule } from './event/event.module';
+import { Event } from './event/entities/event.entity';
 
 @Module({
 	imports:
@@ -40,7 +41,8 @@ import { EventModule } from './event/event.module';
 						Experience,
 						Education,
 						Profile,
-						Post
+						Post,
+						Event
 					],
 				synchronize: true
 			}),

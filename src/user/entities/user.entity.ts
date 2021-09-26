@@ -13,6 +13,7 @@ import {
 	UpdateDateColumn
 } from 'typeorm';
 import { Profile } from './profile.entity';
+import { Event } from 'src/event/entities/event.entity';
 
 @ObjectType()
 @Entity()
@@ -58,6 +59,15 @@ export class User {
 	@ManyToMany(() => User, (user) => user.connections)
 	@JoinTable()
 	connections: User[];
+
+	@Field(
+		(type) => [
+			Event
+		],
+		{ nullable: true }
+	)
+	@OneToMany(() => Event, (event) => event.user)
+	events: Event[];
 
 	@Field(
 		(type) => [
