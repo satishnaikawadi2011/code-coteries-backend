@@ -202,8 +202,9 @@ export class CommentService {
 	}
 
 	//   like/dislike event
-	async likeComment(commentId: string, userId: string, type: CommentType): Promise<EventComment | PostComment> {
+	async likeComment(commentId: string, userId: string, type: CommentType): Promise<CommentResponse> {
 		try {
+			let res: CommentResponse = { eventComment: null, postComment: null };
 			const comment = await this.findOne(commentId, type);
 			// check if userId has already liked comment
 			if (comment.likes.some((like) => like === userId)) {
@@ -215,11 +216,14 @@ export class CommentService {
 			}
 
 			if (type == 'EventComment') {
-				return await this.eventCommRepo.save(comment);
+				const comm = await this.eventCommRepo.save(comment);
+				res = { ...res, eventComment: comm };
 			}
 			else {
-				return await this.postCommRepo.save(comment);
+				const comm = await this.postCommRepo.save(comment);
+				res = { ...res, postComment: comm };
 			}
+			return res;
 		} catch (err) {
 			throw err;
 		}

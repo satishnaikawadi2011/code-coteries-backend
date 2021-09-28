@@ -157,6 +157,7 @@ type Mutation {
   createEvent(addEventInput: AddEventInput!): Event!
   likeEvent(eventId: String!): Event!
   addComment(addCommentInput: AddCommentInput!): CommentResponse!
+  likeComment(type: String!, commentId: String!): CommentResponse!
 }
 
 input CreateUserInput {
