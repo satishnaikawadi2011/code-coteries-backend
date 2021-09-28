@@ -22,6 +22,10 @@ import { JwtModule } from '@nestjs/jwt';
 		[
 			EventService,
 			EventResolver
+		],
+	exports:
+		[
+			EventService
 		]
 })
 export class EventModule {}

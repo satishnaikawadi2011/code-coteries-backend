@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EventComment } from 'src/comment/entities/event-comment.entity';
+import { PostComment } from 'src/comment/entities/post-comment.entity';
 import { Event } from 'src/event/entities/event.entity';
 import { Post } from 'src/post/entities/post.entity';
 import { Repository, getManager, FindOneOptions } from 'typeorm';
@@ -149,6 +151,24 @@ export class UserService {
 	async saveEventToUser(id: string, event: Event): Promise<void> {
 		try {
 			await this.repo.createQueryBuilder().relation(User, 'events').of(id).add(event);
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	// Save new comment to user
+	async saveEventCommToUser(id: string, comment: EventComment): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(User, 'event_comments').of(id).add(comment);
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	// Save new comment to user
+	async savePostCommToUser(id: string, comment: PostComment): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(User, 'post_comments').of(id).add(comment);
 		} catch (err) {
 			throw err;
 		}
