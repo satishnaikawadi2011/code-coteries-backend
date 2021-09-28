@@ -162,6 +162,8 @@ export class CommentService {
 				newComment = await this.findOne(commentId, commentType);
 				// Pass newly created comment to user
 				await this.userService.saveEventCommToUser(user.id, newComment);
+				// Pass newly created comment to event
+				await this.eventService.saveCommentToEvent(entityId, newComment);
 			}
 			else {
 				const insertResult = await this.postCommRepo
@@ -181,6 +183,8 @@ export class CommentService {
 				newComment = await this.findOne(commentId, commentType);
 				// Pass newly created comment to user
 				await this.userService.savePostCommToUser(user.id, newComment);
+				// Pass newly created comment to post
+				await this.postService.saveCommentToPost(entityId, newComment);
 			}
 			return newComment;
 		} catch (err) {

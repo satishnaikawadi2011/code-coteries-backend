@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PostComment } from 'src/comment/entities/post-comment.entity';
 import { UserService } from 'src/user/user.service';
 import { FindManyOptions, FindOneOptions, getManager, Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
@@ -45,6 +46,15 @@ export class PostService {
 	async getPostOwner(post: Post) {
 		const user = await this.userService.find({ username: post.handle });
 		return user[0];
+	}
+
+	// Save new comment to post
+	async saveCommentToPost(id: string, comment: PostComment): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(Post, 'comments').of(id).add(comment);
+		} catch (err) {
+			throw err;
+		}
 	}
 
 	//     async getAllPosts(skip = 0, take = 10): Promise<Post[]> {

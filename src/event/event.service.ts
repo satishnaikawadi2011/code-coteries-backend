@@ -4,6 +4,7 @@ import { FindManyOptions, FindOneOptions, getManager, Repository } from 'typeorm
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/user/user.service';
 import { AddEventInput } from './input/add-event.input';
+import { EventComment } from 'src/comment/entities/event-comment.entity';
 
 @Injectable()
 export class EventService {
@@ -50,6 +51,15 @@ export class EventService {
 				]
 		})).user;
 		return user;
+	}
+
+	// Save new comment to event
+	async saveCommentToEvent(id: string, comment: EventComment): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(Event, 'comments').of(id).add(comment);
+		} catch (err) {
+			throw err;
+		}
 	}
 
 	//     async getAllPosts(skip = 0, take = 10): Promise<Post[]> {
