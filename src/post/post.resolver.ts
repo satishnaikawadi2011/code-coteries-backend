@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
@@ -50,7 +50,7 @@ export class PostResolver {
 		return this.postService.getPostOwner(post);
 	}
 
-	@ResolveField((returns) => User)
+	@ResolveField((returns) => Int)
 	async likeCount(@Parent() post: Post): Promise<number> {
 		return post.likes.length;
 	}

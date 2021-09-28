@@ -62,26 +62,26 @@ export class EventService {
 		}
 	}
 
-	//     async getAllPosts(skip = 0, take = 10): Promise<Post[]> {
-	//     try {
-	//       return await this.repo
-	//         .createQueryBuilder('post')
-	//         .leftJoinAndSelect('post.replies', 'replies')
-	//         .orderBy('post.createdDate', 'DESC')
-	//         .skip(skip)
-	//         .take(take)
-	//         .getMany();
-	//     } catch (err) {
-	//       throw err;
-	//     }
-	//   }
+	async getAllEvents(skip = 0, take = 10): Promise<Event[]> {
+		try {
+			return await this.repo
+				.createQueryBuilder('event')
+				.leftJoinAndSelect('event.comments', 'comments')
+				.orderBy('event.event_date', 'ASC')
+				.skip(skip)
+				.take(take)
+				.getMany();
+		} catch (err) {
+			throw err;
+		}
+	}
 
 	//   Get post by postId
 	async getEventById(id: string): Promise<Event> {
 		try {
 			const event = await this.repo
 				.createQueryBuilder('event')
-				// .leftJoinAndSelect('post.replies', 'reply')
+				.leftJoinAndSelect('event.comments', 'comments')
 				.where('event.id = :id', { id })
 				.getOne();
 			return event;

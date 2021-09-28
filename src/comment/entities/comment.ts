@@ -29,6 +29,4 @@ export abstract class Comment {
 	])
 	@Column({ type: 'simple-array' })
 	likes: string[];
-
-	@Field() likeCount: number;
 }

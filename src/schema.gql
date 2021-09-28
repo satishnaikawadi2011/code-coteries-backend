@@ -60,7 +60,6 @@ type PostComment {
   created_at: DateTime!
   updated_at: DateTime!
   likes: [String!]!
-  likeCount: Float!
   user: User!
   post: Post!
 }
@@ -85,7 +84,6 @@ type EventComment {
   created_at: DateTime!
   updated_at: DateTime!
   likes: [String!]!
-  likeCount: Float!
   user: User!
   event: Event!
 }

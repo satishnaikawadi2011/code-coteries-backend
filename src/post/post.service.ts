@@ -77,7 +77,7 @@ export class PostService {
 		try {
 			const post = await this.repo
 				.createQueryBuilder('post')
-				// .leftJoinAndSelect('post.replies', 'reply')
+				.leftJoinAndSelect('post.comments', 'comments')
 				.where('post.id = :id', { id })
 				.getOne();
 			return post;
