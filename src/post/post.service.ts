@@ -57,19 +57,20 @@ export class PostService {
 		}
 	}
 
-	//     async getAllPosts(skip = 0, take = 10): Promise<Post[]> {
-	//     try {
-	//       return await this.repo
-	//         .createQueryBuilder('post')
-	//         .leftJoinAndSelect('post.replies', 'replies')
-	//         .orderBy('post.createdDate', 'DESC')
-	//         .skip(skip)
-	//         .take(take)
-	//         .getMany();
-	//     } catch (err) {
-	//       throw err;
-	//     }
-	//   }
+	// Get all posts for generic feed; with pagination
+	async getAllPosts(skip = 0, take = 10): Promise<Post[]> {
+		try {
+			return await this.repo
+				.createQueryBuilder('post')
+				.leftJoinAndSelect('post.comments', 'comments')
+				.orderBy('post.created_at', 'DESC')
+				.skip(skip)
+				.take(take)
+				.getMany();
+		} catch (err) {
+			throw err;
+		}
+	}
 
 	//   Get post by postId
 	async getPostById(id: string): Promise<Post> {

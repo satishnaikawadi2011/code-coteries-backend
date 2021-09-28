@@ -18,6 +18,19 @@ export class PostResolver {
 	}
 
 	@UseGuards(AuthGuard)
+	@Query((returns) => [
+		Post
+	])
+	async getAllPosts(
+		@Args('skip', { nullable: true })
+		skip?: number,
+		@Args('take', { nullable: true })
+		take?: number
+	): Promise<Post[]> {
+		return this.postService.getAllPosts(skip, take);
+	}
+
+	@UseGuards(AuthGuard)
 	@Mutation((returns) => Post)
 	async createPost(
 		@Args('createPostInput') createPostInput: CreatePostInput,

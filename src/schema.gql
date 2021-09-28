@@ -137,6 +137,7 @@ type Query {
   getMyFollowers: [User!]!
   getMyFollowings: [User!]!
   getPost(postId: String!): Post!
+  getAllPosts(take: Float, skip: Float): [Post!]!
   getEvent(eventId: String!): Event!
 }
 
