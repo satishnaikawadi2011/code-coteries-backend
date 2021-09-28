@@ -127,6 +127,11 @@ type AuthResponse {
   token: String!
 }
 
+type CommentResponse {
+  postComment: PostComment
+  eventComment: EventComment
+}
+
 type Query {
   me: User!
   getMyFollowers: [User!]!
@@ -152,6 +157,7 @@ type Mutation {
   likePost(postId: String!): Post!
   createEvent(addEventInput: AddEventInput!): Event!
   likeEvent(eventId: String!): Event!
+  addComment(addCommentInput: AddCommentInput!): CommentResponse!
 }
 
 input CreateUserInput {
@@ -233,4 +239,10 @@ input AddEventInput {
   image_url: String!
   event_url: String!
   event_date: String!
+}
+
+input AddCommentInput {
+  content: String!
+  commentType: String!
+  entityId: String!
 }

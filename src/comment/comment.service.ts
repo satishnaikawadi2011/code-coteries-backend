@@ -8,6 +8,7 @@ import { FindManyOptions, FindOneOptions, getManager, Repository } from 'typeorm
 import { EventComment } from './entities/event-comment.entity';
 import { PostComment } from './entities/post-comment.entity';
 import { AddCommentInput } from './input/add-comment';
+import { CommentResponse } from './types/comment-res';
 
 @Injectable()
 export class CommentService {
@@ -42,10 +43,10 @@ export class CommentService {
 	) {
 		if (!id) return null;
 		if (type == 'EventComment') {
-			return this.eventCommRepo.findOne(id, options.ecOpts);
+			return this.eventCommRepo.findOne(id, options?.ecOpts);
 		}
 		else {
-			return this.postCommRepo.findOne(id, options.pcOpts);
+			return this.postCommRepo.findOne(id, options?.pcOpts);
 		}
 	}
 
@@ -54,10 +55,10 @@ export class CommentService {
 		options?: { pcOpts?: FindManyOptions<PostComment>; ecOpts?: FindManyOptions<EventComment> }
 	) {
 		if (type == 'EventComment') {
-			return this.eventCommRepo.find(options.ecOpts);
+			return this.eventCommRepo.find(options?.ecOpts);
 		}
 		else {
-			return this.postCommRepo.find(options.pcOpts);
+			return this.postCommRepo.find(options?.pcOpts);
 		}
 	}
 
@@ -136,15 +137,17 @@ export class CommentService {
 	// where "createdDate" > now() - interval '1 hour'
 
 	//   Create a new post
-	async createComment(
-		{ commentType, content, entityId }: AddCommentInput,
-		userId: string
-	): Promise<EventComment | PostComment> {
+	async createComment({ commentType, content, entityId }: AddCommentInput, userId: string): Promise<CommentResponse> {
+		let res: CommentResponse;
 		try {
 			// Find user by id
 			const user = await this.userService.findOne(userId);
 			let newComment;
 			if (commentType == 'EventComment') {
+				const event = await this.eventService.findOne(entityId);
+				if (!event) {
+					throw new NotFoundException('Event with this id does not exists !');
+				}
 				const insertResult = await this.eventCommRepo
 					.createQueryBuilder()
 					.insert()
@@ -164,8 +167,13 @@ export class CommentService {
 				await this.userService.saveEventCommToUser(user.id, newComment);
 				// Pass newly created comment to event
 				await this.eventService.saveCommentToEvent(entityId, newComment);
+				res = { eventComment: newComment, postComment: null };
 			}
 			else {
+				const post = await this.postService.findOne(entityId);
+				if (!post) {
+					throw new NotFoundException('Post with this id does not exists !');
+				}
 				const insertResult = await this.postCommRepo
 					.createQueryBuilder()
 					.insert()
@@ -185,8 +193,9 @@ export class CommentService {
 				await this.userService.savePostCommToUser(user.id, newComment);
 				// Pass newly created comment to post
 				await this.postService.saveCommentToPost(entityId, newComment);
+				res = { eventComment: null, postComment: newComment };
 			}
-			return newComment;
+			return res;
 		} catch (err) {
 			throw err;
 		}
