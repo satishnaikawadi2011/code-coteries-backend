@@ -108,6 +108,7 @@ type User {
   username: String!
   email: String!
   is_active: Boolean!
+  is_admin: Boolean!
   created_at: DateTime!
   updated_at: DateTime!
   profile: Profile

@@ -40,6 +40,10 @@ export class User {
 	is_active: boolean;
 
 	@Field()
+	@Column({ default: false })
+	is_admin: boolean;
+
+	@Field()
 	@CreateDateColumn()
 	created_at: Date;
 
