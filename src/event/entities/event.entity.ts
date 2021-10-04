@@ -5,12 +5,15 @@ import {
 	CreateDateColumn,
 	Entity,
 	JoinColumn,
+	JoinTable,
+	ManyToMany,
 	ManyToOne,
 	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm';
 import { EventComment } from 'src/comment/entities/event-comment.entity';
+import { Tag } from 'src/tag/entities/tag.entity';
 
 @ObjectType()
 @Entity()
@@ -69,4 +72,13 @@ export class Event {
 	likes: string[];
 
 	@Field() likeCount: number;
+
+	@Field(
+		(type) => [
+			Tag
+		],
+		{ nullable: true }
+	)
+	@ManyToMany(() => Tag, (tag) => tag.events)
+	tags: Tag[];
 }

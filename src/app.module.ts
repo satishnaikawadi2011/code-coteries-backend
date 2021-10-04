@@ -18,6 +18,7 @@ import { CommentModule } from './comment/comment.module';
 import { PostComment } from './comment/entities/post-comment.entity';
 import { EventComment } from './comment/entities/event-comment.entity';
 import { TagModule } from './tag/tag.module';
+import { Tag } from './tag/entities/tag.entity';
 
 @Module({
 	imports:
@@ -48,7 +49,8 @@ import { TagModule } from './tag/tag.module';
 						Post,
 						Event,
 						PostComment,
-						EventComment
+						EventComment,
+						Tag
 					],
 				synchronize: true
 			}),

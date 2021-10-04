@@ -64,19 +64,6 @@ type PostComment {
   post: Post!
 }
 
-type Post {
-  id: String!
-  caption: String!
-  image_url: String!
-  created_at: DateTime!
-  updated_at: DateTime!
-  user: User!
-  comments: [PostComment!]
-  likes: [String!]!
-  handle: String!
-  likeCount: Float!
-}
-
 type EventComment {
   id: String!
   content: String!
@@ -101,6 +88,33 @@ type Event {
   comments: [EventComment!]
   likes: [String!]!
   likeCount: Float!
+  tags: [Tag!]
+}
+
+type Tag {
+  id: String!
+  name: String!
+  description: String!
+  likes: [String!]!
+  created_at: DateTime!
+  updated_at: DateTime!
+  posts: [Post!]
+  events: [Event!]
+  likesCount: Float!
+}
+
+type Post {
+  id: String!
+  caption: String!
+  image_url: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  user: User!
+  comments: [PostComment!]
+  likes: [String!]!
+  handle: String!
+  likeCount: Float!
+  tags: [Tag!]
 }
 
 type User {

@@ -5,12 +5,15 @@ import {
 	CreateDateColumn,
 	Entity,
 	JoinColumn,
+	JoinTable,
+	ManyToMany,
 	ManyToOne,
 	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm';
 import { PostComment } from 'src/comment/entities/post-comment.entity';
+import { Tag } from 'src/tag/entities/tag.entity';
 
 @ObjectType()
 @Entity()
@@ -62,13 +65,12 @@ export class Post {
 
 	@Field() likeCount: number;
 
-	// @Field(
-	// 	(type) => [
-	// 		User
-	// 	],
-	// 	{ nullable: true }
-	// )
-	// @ManyToMany(() => User, (user) => user.connections)
-	// @JoinTable()
-	// connections: User[];
+	@Field(
+		(type) => [
+			Tag
+		],
+		{ nullable: true }
+	)
+	@ManyToMany(() => Tag, (tag) => tag.posts)
+	tags: Tag[];
 }
