@@ -17,7 +17,7 @@ export class PostResolver {
 		return this.postService.getPostById(postId);
 	}
 
-	@UseGuards(AuthGuard)
+	// @UseGuards(AuthGuard)
 	@Query((returns) => [
 		Post
 	])
