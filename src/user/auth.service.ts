@@ -14,13 +14,13 @@ export class AuthService {
 		private jwtService: JwtService
 	) {}
 
-	async signup({ email, password, username }: CreateUserInput): Promise<AuthResponse> {
+	async signup({ email, password, username, fullName }: CreateUserInput): Promise<AuthResponse> {
 		const isExistAlready = await this.usersService.findByEmailOrUsername(email, username);
 		if (isExistAlready.length) {
 			throw new BadRequestException('User with this email or username already exists !!');
 		}
 		const hashedPassword = await argon2.hash(password);
-		const user = await this.usersService.create({ email, password: hashedPassword, username });
+		const user = await this.usersService.create({ email, password: hashedPassword, username, fullName });
 		const token = await this.jwtService.signAsync({ id: user.id });
 		return { user, token };
 	}

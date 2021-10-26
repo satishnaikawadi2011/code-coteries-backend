@@ -17,4 +17,8 @@ export class CreateUserInput {
 	@Field()
 	@IsEmail()
 	email: string;
+
+	@Field()
+	@IsString()
+	fullName: string;
 }

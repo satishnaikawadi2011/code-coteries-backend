@@ -121,6 +121,7 @@ type User {
   id: String!
   username: String!
   email: String!
+  fullName: String!
   is_active: Boolean!
   is_admin: Boolean!
   created_at: DateTime!
@@ -179,6 +180,7 @@ input CreateUserInput {
   username: String!
   password: String!
   email: String!
+  fullName: String!
 }
 
 input SigninUserInput {

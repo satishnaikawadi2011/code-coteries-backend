@@ -32,6 +32,10 @@ export class User {
 	@Column()
 	email: string;
 
+	@Field()
+	@Column()
+	fullName: string;
+
 	// @Field()
 	@Column() password: string;
 
