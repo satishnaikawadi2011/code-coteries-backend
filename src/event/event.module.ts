@@ -5,6 +5,7 @@ import { EventResolver } from './event.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { TagModule } from 'src/tag/tag.module';
 
 @Module({
 	imports:
@@ -13,6 +14,7 @@ import { JwtModule } from '@nestjs/jwt';
 				Event
 			]),
 			UserModule,
+			TagModule,
 			JwtModule.register({
 				secret: 'thisismysecret',
 				signOptions: { expiresIn: '7d' }

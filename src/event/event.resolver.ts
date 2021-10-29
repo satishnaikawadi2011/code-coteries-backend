@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Args, Context, ResolveField, Mutation, Parent } from '@nestjs/graphql';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { Tag } from 'src/tag/entities/tag.entity';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Event } from './entities/event.entity';
@@ -30,6 +31,20 @@ export class EventResolver {
 	@Mutation((returns) => Event)
 	async likeEvent(@Args('eventId') eventId: string, @Context('userId') userId: string): Promise<Event> {
 		return this.eventService.likeEvent(eventId, userId);
+	}
+
+	@Query((returns) => [
+		Event
+	])
+	async getEventsByTag(@Args('tagId') tagId: string): Promise<Event[]> {
+		return this.eventService.getAllEventsRelatedToTag(tagId);
+	}
+
+	@ResolveField((returns) => [
+		Tag
+	])
+	tags(@Parent() event: Event): Promise<Tag[]> {
+		return this.eventService.getTagsOfEvent(event.id);
 	}
 
 	@ResolveField((returns) => User)

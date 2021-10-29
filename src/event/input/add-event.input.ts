@@ -22,4 +22,13 @@ export class AddEventInput {
 	@IsDateString()
 	@Field()
 	event_date: string;
+
+	@IsString({ each: true })
+	@Field(
+		(type) => [
+			String
+		],
+		{ nullable: true }
+	)
+	tagIds: string[] = [];
 }

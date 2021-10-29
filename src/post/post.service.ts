@@ -92,46 +92,10 @@ export class PostService {
 		}
 	}
 
-	//   Get posts by handle; with pagination
-	//   async getPostsByHandle(handle: string, skip = 0, take = 10): Promise<Post[]> {
-	//     try {
-	//       return await this.repo
-	//         .createQueryBuilder('post')
-	//         .where('handle = :handle', { handle })
-	//         .orderBy('post.createdDate', 'DESC')
-	//         .skip(skip)
-	//         .take(take)
-	//         .getMany();
-	//     } catch (err) {
-	//       throw err;
-	//     }
-	//   }
-
-	//   Get posts by topic w/ pagination
-	//   async getPostsByTopic(topic: string, skip = 0, take = 10): Promise<Post[]> {
-	//     try {
-	//       return await this.repo
-	//         .createQueryBuilder('post')
-	//         .where('topic = :topic', { topic })
-	//         .orderBy('post.createdDate', 'DESC')
-	//         .skip(skip)
-	//         .take(take)
-	//         .getMany();
-	//     } catch (err) {
-	//       throw err;
-	//     }
-	//   }
-
-	// Get trending data
-	// select topic
-	// from "Post"
-	// where "createdDate" > now() - interval '1 hour'
-
 	//   Create a new post
 	async createPost({ caption, image_url, tagIds }: CreatePostInput, userId: string): Promise<Post> {
 		try {
 			// Find user by id
-			console.log(tagIds);
 			const user = await this.userService.findOne(userId);
 			const insertResult = await this.repo
 				.createQueryBuilder()
@@ -219,33 +183,4 @@ export class PostService {
 		);
 		return posts;
 	}
-
-	//   reply to post
-	//   async replyToPost(
-	//     handle: string,
-	//     text: string,
-	//     postId: string,
-	//   ): Promise<Post> {
-	//     try {
-	//       // Get post to reply to
-	//       const post = await this.repo
-	//         .createQueryBuilder('post')
-	//         .leftJoinAndSelect('post.replies', 'reply')
-	//         .where('post.id = :id', { id: postId })
-	//         .getOne();
-	//       // insert new reply and return reply id
-	//       const result: InsertResult = await this.replyRepository
-	//         .createQueryBuilder()
-	//         .insert()
-	//         .into(Reply)
-	//         .values([{ handle, text, post }])
-	//         .execute();
-	//       // return new reply and add to post
-	//       const reply = await this.replyRepository.findOne(result.identifiers[0]);
-	//       post.replies = [...post.replies, reply];
-	//       return await this.repo.save(post);
-	//     } catch (err) {
-	//       throw err;
-	//     }
-	//   }
 }

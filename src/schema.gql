@@ -155,6 +155,7 @@ type Query {
   getPostsByTag(tagId: String!): [Post!]!
   getAllTags: [Tag!]!
   getEvent(eventId: String!): Event!
+  getEventsByTag(tagId: String!): [Event!]!
 }
 
 type Mutation {
@@ -265,6 +266,7 @@ input AddEventInput {
   image_url: String!
   event_url: String!
   event_date: String!
+  tagIds: [String!] = []
 }
 
 input AddCommentInput {
