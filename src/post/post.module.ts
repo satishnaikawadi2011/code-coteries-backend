@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
+import { TagModule } from 'src/tag/tag.module';
 
 @Module({
 	imports:
@@ -13,6 +14,7 @@ import { JwtModule } from '@nestjs/jwt';
 				Post
 			]),
 			UserModule,
+			TagModule,
 			JwtModule.register({
 				secret: 'thisismysecret',
 				signOptions: { expiresIn: '7d' }

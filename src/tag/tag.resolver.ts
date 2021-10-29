@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { AdminAuthGuard } from 'src/guards/admin-auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { Tag } from './entities/tag.entity';
 import { CreateTagInput } from './input/create-tag.input';
 import { TagService } from './tag.service';
@@ -13,5 +14,13 @@ export class TagResolver {
 	@Mutation((returns) => Tag)
 	async createTag(@Args('createTagInput') createTagInput: CreateTagInput): Promise<Tag> {
 		return this.tagService.createTag(createTagInput);
+	}
+
+	@UseGuards(AuthGuard)
+	@Query((returns) => [
+		Tag
+	])
+	async getAllTags(): Promise<Tag[]> {
+		return this.tagService.getAllTags(0, 100);
 	}
 }

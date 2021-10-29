@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { Tag } from 'src/tag/entities/tag.entity';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Post } from './entities/post.entity';
@@ -30,6 +31,14 @@ export class PostResolver {
 		return this.postService.getAllPosts(skip, take);
 	}
 
+	// @UseGuards(AuthGuard)
+	@Query((returns) => [
+		Post
+	])
+	async getPostsByTag(@Args('tagId') tagId: string): Promise<Post[]> {
+		return this.postService.getAllPostsRelatedToTag(tagId);
+	}
+
 	@UseGuards(AuthGuard)
 	@Mutation((returns) => Post)
 	async createPost(
@@ -48,6 +57,13 @@ export class PostResolver {
 	@ResolveField((returns) => User)
 	async user(@Parent() post: Post): Promise<User> {
 		return this.postService.getPostOwner(post);
+	}
+
+	@ResolveField((returns) => [
+		Tag
+	])
+	tags(@Parent() post: Post): Promise<Tag[]> {
+		return this.postService.getTagsOfPost(post.id);
 	}
 
 	@ResolveField((returns) => Int)

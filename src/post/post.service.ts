@@ -1,14 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostComment } from 'src/comment/entities/post-comment.entity';
+import { Tag } from 'src/tag/entities/tag.entity';
+import { TagService } from 'src/tag/tag.service';
 import { UserService } from 'src/user/user.service';
-import { FindManyOptions, FindOneOptions, getManager, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, getManager, In, Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './input/create-post.input';
 
 @Injectable()
 export class PostService {
-	constructor(@InjectRepository(Post) private repo: Repository<Post>, private userService: UserService) {}
+	constructor(
+		@InjectRepository(Post) private repo: Repository<Post>,
+		private userService: UserService,
+		private tagService: TagService
+	) {}
 
 	async runRawQuery(query: string, parameters?: any[]) {
 		const manager = await getManager();
@@ -122,9 +128,10 @@ export class PostService {
 	// where "createdDate" > now() - interval '1 hour'
 
 	//   Create a new post
-	async createPost({ caption, image_url }: CreatePostInput, userId: string): Promise<Post> {
+	async createPost({ caption, image_url, tagIds }: CreatePostInput, userId: string): Promise<Post> {
 		try {
 			// Find user by id
+			console.log(tagIds);
 			const user = await this.userService.findOne(userId);
 			const insertResult = await this.repo
 				.createQueryBuilder()
@@ -137,18 +144,37 @@ export class PostService {
 						user,
 						caption,
 						image_url
-						// replies: [],
 					}
 				])
 				.execute();
 			const postId = insertResult.identifiers[0].id;
 			const newPost = await this.findOne(postId);
+
 			// Pass newly created post to profile
 			await this.userService.savePostToUser(user.id, newPost);
+
+			// if user has attached some tags to the post
+			if (tagIds && tagIds.length !== 0) {
+				const tags = await this.tagService.find({ where: { id: In(tagIds) } });
+				tags.forEach(async (tag) => {
+					await this.saveTagToPost(postId, tag);
+				});
+			}
+
 			return newPost;
 		} catch (err) {
 			throw err;
 		}
+	}
+
+	async getTagsOfPost(postId: string) {
+		const post = await this.findOne(postId, {
+			relations:
+				[
+					'tags'
+				]
+		});
+		return post.tags;
 	}
 
 	//   like/dislike post
@@ -168,6 +194,30 @@ export class PostService {
 		} catch (err) {
 			throw err;
 		}
+	}
+
+	// add tag to post
+	async saveTagToPost(id: string, tag: Tag): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(Post, 'tags').of(id).add(tag);
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	// all posts related to particular tag
+	async getAllPostsRelatedToTag(tagId: string) {
+		const posts = await this.runRawQuery(
+			`
+			SELECT * FROM post p
+			INNER JOIN tag_posts_post tp
+			ON tp.tagId = ? AND tp.postId = p.id
+		`,
+			[
+				tagId
+			]
+		);
+		return posts;
 	}
 
 	//   reply to post

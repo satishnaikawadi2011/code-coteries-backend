@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Post } from 'src/post/entities/post.entity';
 import { sortTags } from 'src/utils/sort';
 import { FindManyOptions, FindOneOptions, getManager, Repository } from 'typeorm';
 import { Tag } from './entities/tag.entity';
@@ -94,6 +95,15 @@ export class TagService {
 			const tagId = insertResult.identifiers[0].id;
 			const newTag = await this.findOne(tagId);
 			return newTag;
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	// add post to tag
+	async savePostToTag(id: string, post: Post): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(Tag, 'posts').of(id).add(post);
 		} catch (err) {
 			throw err;
 		}

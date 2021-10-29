@@ -10,4 +10,13 @@ export class CreatePostInput {
 	@IsUrl()
 	@Field()
 	image_url: string;
+
+	@IsString({ each: true })
+	@Field(
+		(type) => [
+			String
+		],
+		{ nullable: true }
+	)
+	tagIds: string[] = [];
 }
