@@ -17,7 +17,7 @@ export class AdminAuthGuard implements CanActivate {
 				const token = ctx.headers.authorization.split(' ')[1];
 				const decoded = await this.jwtService.verifyAsync(token, { secret: 'thisismysecret' });
 				const user = await this.usersService.findOne(decoded.id);
-				if (!user && !user.is_admin) {
+				if (!user || !user.is_admin) {
 					return false;
 				}
 				ctx.userId = decoded.id;

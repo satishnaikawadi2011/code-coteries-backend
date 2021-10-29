@@ -4,6 +4,7 @@ import { TagResolver } from './tag.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { Tag } from './entities/tag.entity';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
 	imports:
@@ -11,6 +12,7 @@ import { Tag } from './entities/tag.entity';
 			TypeOrmModule.forFeature([
 				Tag
 			]),
+			UserModule,
 			JwtModule.register({
 				secret: 'thisismysecret',
 				signOptions: { expiresIn: '7d' }
@@ -20,6 +22,10 @@ import { Tag } from './entities/tag.entity';
 		[
 			TagService,
 			TagResolver
+		],
+	exports:
+		[
+			TagService
 		]
 })
 export class TagModule {}

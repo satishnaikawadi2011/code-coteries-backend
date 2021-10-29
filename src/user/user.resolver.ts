@@ -36,6 +36,7 @@ export class UserResolver {
 
 	@Mutation((returns) => AuthResponse)
 	async registerUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<AuthResponse> {
+		// console.log(createUserInput);
 		return this.authService.signup(createUserInput);
 	}
 

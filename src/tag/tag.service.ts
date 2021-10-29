@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { sortTags } from 'src/utils/sort';
 import { FindManyOptions, FindOneOptions, getManager, Repository } from 'typeorm';
@@ -53,7 +53,7 @@ export class TagService {
 	}
 
 	//   like/dislike tag
-	async likePost(tagId: string, userId: string): Promise<Tag> {
+	async likeTag(tagId: string, userId: string): Promise<Tag> {
 		try {
 			const tag = await this.findOne(tagId);
 			// check if userId has already liked tag
@@ -66,6 +66,34 @@ export class TagService {
 				tag.likes.push(userId);
 				return await this.repo.save(tag);
 			}
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	//   Create a new tag
+	async createTag({ description, name }: CreateTagInput): Promise<Tag> {
+		try {
+			// Find tags by name
+			const isExists = await this.find({ where: { name } });
+			if (isExists.length) {
+				throw new BadRequestException('Tag with this name already exists !!');
+			}
+			const insertResult = await this.repo
+				.createQueryBuilder()
+				.insert()
+				.into(Tag)
+				.values([
+					{
+						description,
+						likes: [],
+						name
+					}
+				])
+				.execute();
+			const tagId = insertResult.identifiers[0].id;
+			const newTag = await this.findOne(tagId);
+			return newTag;
 		} catch (err) {
 			throw err;
 		}

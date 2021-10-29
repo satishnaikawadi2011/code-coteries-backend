@@ -22,8 +22,8 @@ export class UserService {
 		return manager.query(query, parameters);
 	}
 
-	create({ email, password, username }: CreateUserInput) {
-		const user = this.repo.create({ email, password, username });
+	create({ email, password, username, fullName }: CreateUserInput) {
+		const user = this.repo.create({ email, password, username, fullName });
 		return this.repo.save(user);
 	}
 
