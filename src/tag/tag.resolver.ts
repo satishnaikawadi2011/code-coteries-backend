@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { AdminAuthGuard } from 'src/guards/admin-auth.guard';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Tag } from './entities/tag.entity';
@@ -22,5 +22,10 @@ export class TagResolver {
 	])
 	async getAllTags(): Promise<Tag[]> {
 		return this.tagService.getAllTags(0, 100);
+	}
+
+	@ResolveField((returns) => Int)
+	likesCount(@Parent() tag: Tag): number {
+		return tag.likes.length;
 	}
 }

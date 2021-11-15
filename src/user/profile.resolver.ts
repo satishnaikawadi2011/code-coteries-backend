@@ -184,6 +184,28 @@ export class ProfileResolver {
 		return social;
 	}
 
+	@Mutation((returns) => Profile)
+	@UseGuards(AuthGuard)
+	async editUserAvatar(@Args('url') url: string, @Context('userId') userId: string): Promise<Social> {
+		const user = await this.usersService.findOne(userId, {
+			relations:
+				[
+					'profile'
+				]
+		});
+
+		let profile;
+		if (!user.profile) {
+			profile = await this.profileService.create({ image_url: url });
+		}
+		else {
+			profile = await this.profileService.update(user.profile.id, { image_url: url });
+		}
+		user.profile = profile;
+		this.usersService.save(user);
+		return profile;
+	}
+
 	@ResolveField((returns) => [
 		Education
 	])

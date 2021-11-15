@@ -6,30 +6,30 @@ export class EditProfileInput {
 	@Field({ nullable: true })
 	@IsString()
 	@IsOptional()
-	company: string;
+	company?: string;
 
 	@Field({ nullable: true })
 	@IsUrl()
 	@IsOptional()
-	website: string;
+	website?: string;
 
 	@IsString()
 	@Field({ nullable: true })
 	@IsOptional()
-	location: string;
+	location?: string;
 
 	@Field({ nullable: true })
 	@IsUrl()
 	@IsOptional()
-	github: string;
+	github?: string;
 
 	@IsString()
 	@Field({ nullable: true })
 	@IsOptional()
-	bio: string;
+	bio?: string;
 
 	@Field({ nullable: true })
 	@IsUrl()
 	@IsOptional()
-	image_url: string;
+	image_url?: string;
 }
