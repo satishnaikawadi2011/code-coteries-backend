@@ -1,6 +1,6 @@
 import { AuthGuard } from './../guards/auth.guard';
 import { BadGatewayException, BadRequestException, UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { EducationService } from './education.service';
 import { Education } from './entities/education.entity';
 import { Profile } from './entities/profile.entity';
@@ -181,6 +181,28 @@ export class ProfileResolver {
 		}
 		user.profile.social = social;
 		this.profileService.save(user.profile);
+		return social;
+	}
+
+	@Query((returns) => Social)
+	@UseGuards(AuthGuard)
+	async getMySocial(@Context('userId') userId: string): Promise<Social> {
+		const user = await this.usersService.findOne(userId, {
+			relations:
+				[
+					'profile',
+					'profile.social'
+				]
+		});
+		let social;
+		if (!user.profile.social) {
+			social = await this.socialService.create({});
+			user.profile.social = social;
+			this.profileService.save(user.profile);
+		}
+		else {
+			social = user.profile.social;
+		}
 		return social;
 	}
 

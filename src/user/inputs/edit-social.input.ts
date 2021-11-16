@@ -6,25 +6,25 @@ export class EditSocialInput {
 	@Field({ nullable: true })
 	@IsUrl()
 	@IsOptional()
-	youtube: string;
+	youtube?: string;
 
 	@Field({ nullable: true })
 	@IsUrl()
 	@IsOptional()
-	twitter: string;
+	twitter?: string;
 
 	@IsUrl()
 	@Field({ nullable: true })
 	@IsOptional()
-	instagram: string;
+	instagram?: string;
 
 	@Field({ nullable: true })
 	@IsUrl()
 	@IsOptional()
-	facebook: string;
+	facebook?: string;
 
 	@IsUrl()
 	@Field({ nullable: true })
 	@IsOptional()
-	linkedin: string;
+	linkedin?: string;
 }

@@ -148,8 +148,10 @@ type CommentResponse {
 
 type Query {
   me: User!
+  getMyProfile: Profile!
   getMyFollowers: [User!]!
   getMyFollowings: [User!]!
+  getMySocial: Social!
   getPost(postId: String!): Post!
   getAllPosts(take: Float, skip: Float): [Post!]!
   getPostsByTag(tagId: String!): [Post!]!
@@ -171,6 +173,7 @@ type Mutation {
   editExperience(editExperienceInput: EditExperienceInput!, id: String!): Experience!
   removeExperience(id: String!): String!
   editSocial(editSocialInput: EditSocialInput!): Social!
+  editUserAvatar(url: String!): Profile!
   createPost(createPostInput: CreatePostInput!): Post!
   likePost(postId: String!): Post!
   createTag(createTagInput: CreateTagInput!): Tag!

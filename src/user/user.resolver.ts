@@ -69,6 +69,28 @@ export class UserResolver {
 		return profile;
 	}
 
+	@Query((returns) => Profile)
+	@UseGuards(AuthGuard)
+	async getMyProfile(@Context('userId') userId: string): Promise<Profile> {
+		const user = await this.usersService.findOne(userId, {
+			relations:
+				[
+					'profile'
+				]
+		});
+		let profile;
+		if (!user.profile) {
+			profile = await this.profileService.create({});
+			user.profile = profile;
+			this.usersService.save(user);
+		}
+		else {
+			profile = user.profile;
+		}
+		// console.log('==============Profile============', profile);
+		return profile;
+	}
+
 	@Mutation((returns) => Education)
 	@UseGuards(AuthGuard)
 	async addEducation(
