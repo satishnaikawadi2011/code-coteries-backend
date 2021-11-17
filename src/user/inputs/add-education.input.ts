@@ -22,7 +22,7 @@ export class AddEducationInput {
 	@Field({ nullable: true })
 	@IsOptional()
 	@IsDateString()
-	to: string;
+	to: string | null;
 
 	@Field({ defaultValue: false })
 	@IsBoolean()

@@ -72,7 +72,7 @@ export class ProfileResolver {
 			}
 		}
 		await this.educationService.remove(id);
-		return 'Successfully deleted your education.';
+		return id;
 	}
 
 	@Mutation((returns) => Experience)
@@ -151,7 +151,7 @@ export class ProfileResolver {
 			}
 		}
 		await this.experienceService.remove(id);
-		return 'Successfully deleted your experience.';
+		return id;
 	}
 
 	@Mutation((returns) => Social)
