@@ -65,6 +65,8 @@ export class Post {
 
 	@Field() likeCount: number;
 
+	@Field() commentCount: number;
+
 	@Field(
 		(type) => [
 			Tag

@@ -110,10 +110,11 @@ type Post {
   created_at: DateTime!
   updated_at: DateTime!
   user: User!
-  comments: [PostComment!]
+  comments(lastTimestamp: String, limit: Float = 10): [PostComment!]
   likes: [String!]!
   handle: String!
   likeCount: Float!
+  commentCount: Float!
   tags: [Tag!]
 }
 

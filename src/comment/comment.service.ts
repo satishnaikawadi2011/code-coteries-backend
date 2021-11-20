@@ -4,7 +4,7 @@ import { EventService } from 'src/event/event.service';
 import { PostService } from 'src/post/post.service';
 import { UserService } from 'src/user/user.service';
 import { CommentType } from 'src/utils/types';
-import { FindManyOptions, FindOneOptions, getManager, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, getManager, LessThan, Repository } from 'typeorm';
 import { EventComment } from './entities/event-comment.entity';
 import { PostComment } from './entities/post-comment.entity';
 import { AddCommentInput } from './input/add-comment';
@@ -262,7 +262,7 @@ export class CommentService {
 
 
 	//   get comments of particular post
-	async getCommentsOfPost(postId: string, limit = 10, skip = 0): Promise<PostComment[]> {
+	async getCommentsOfPost(postId: string, limit?:number,lastTimestamp?: string,skip?:number): Promise<PostComment[]> {
 		try {
 			const comments = await this.postCommRepo.find({
 				where:
@@ -270,17 +270,36 @@ export class CommentService {
 						post:
 							{
 								id: postId
-							}
 					},
-				take: limit,
-				skip,
+						created_at: LessThan(lastTimestamp)
+					},
+				take: limit ? limit : 10,
+				skip:skip?skip:0,
 				order:
 					{
 						created_at: 'DESC',
 						likes: 'DESC'
-					}
+				}
 			});
 			return comments;
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	//   get comment count of particular post
+	async getCommentCountOfPost(postId: string): Promise<number> {
+		try {
+			const count = await this.postCommRepo.count({
+				where:
+					{
+						post:
+							{
+								id: postId
+							}
+					}
+			});
+			return count;
 		} catch (err) {
 			throw err;
 		}

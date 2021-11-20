@@ -102,7 +102,18 @@ export class PostResolver {
 	@ResolveField((returns) => [
 		PostComment
 	])
-	async comments(@Parent() post: Post): Promise<PostComment[]> {
-		return this.commentService.getCommentsOfPost(post.id);
+	async comments(
+		@Parent() post: Post,
+		@Args('limit', { defaultValue: 10, nullable: true })
+		limit?: number,
+		@Args('lastTimestamp', { nullable: true })
+		lastTimestamp?: string
+	): Promise<PostComment[]> {
+		return this.commentService.getCommentsOfPost(post.id, limit, lastTimestamp);
+	}
+
+	@ResolveField((returns) => Int)
+	async commentCount(@Parent() post: Post): Promise<number> {
+		return this.commentService.getCommentCountOfPost(post.id);
 	}
 }
