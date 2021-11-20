@@ -4,7 +4,7 @@ import { PostComment } from 'src/comment/entities/post-comment.entity';
 import { Tag } from 'src/tag/entities/tag.entity';
 import { TagService } from 'src/tag/tag.service';
 import { UserService } from 'src/user/user.service';
-import { FindManyOptions, FindOneOptions, getManager, In, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, getManager, In, LessThan, Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './input/create-post.input';
 
@@ -76,6 +76,27 @@ export class PostService {
 		} catch (err) {
 			throw err;
 		}
+	}
+
+	// get feed posts
+	async getFeed(limit: number, feedIds: string[], lastTimestamp?: string) {
+		const posts = await this.repo.find({
+			where:
+				{
+					user:
+						{
+							id: In(feedIds)
+						},
+					created_at: LessThan(lastTimestamp)
+				},
+			take: limit,
+			order:
+				{
+					created_at: 'DESC'
+				}
+		});
+
+		return posts;
 	}
 
 	//   Get post by postId

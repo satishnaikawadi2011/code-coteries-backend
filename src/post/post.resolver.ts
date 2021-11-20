@@ -6,6 +6,7 @@ import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './input/create-post.input';
+import { GetFeedInput } from './input/get-feed.input';
 import { PostService } from './post.service';
 
 @Resolver((of) => Post)
@@ -29,6 +30,15 @@ export class PostResolver {
 		take?: number
 	): Promise<Post[]> {
 		return this.postService.getAllPosts(skip, take);
+	}
+
+	@UseGuards(AuthGuard)
+	@Query((returns) => [
+		Post
+	])
+	async getFeed(@Args('getFeedInput') getFeedInput: GetFeedInput): Promise<Post[]> {
+		const { feedIds, lastTimestamp, limit } = getFeedInput;
+		return this.postService.getFeed(limit, feedIds, lastTimestamp);
 	}
 
 	// @UseGuards(AuthGuard)

@@ -155,6 +155,7 @@ type Query {
   getMySocial: Social!
   getPost(postId: String!): Post!
   getAllPosts(take: Float, skip: Float): [Post!]!
+  getFeed(getFeedInput: GetFeedInput!): [Post!]!
   getPostsByTag(tagId: String!): [Post!]!
   getAllTags: [Tag!]!
   getEvent(eventId: String!): Event!
@@ -165,6 +166,12 @@ input SuggestUsersInput {
   limit: Int
   created_at: String!
   followerIds: [String!] = []
+}
+
+input GetFeedInput {
+  limit: Int
+  lastTimestamp: String!
+  feedIds: [String!] = []
 }
 
 type Mutation {
