@@ -1,5 +1,7 @@
+import { CommentService } from './../comment/comment.service';
 import { UseGuards, BadRequestException } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { PostComment } from 'src/comment/entities/post-comment.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Tag } from 'src/tag/entities/tag.entity';
 import { User } from 'src/user/entities/user.entity';
@@ -11,7 +13,11 @@ import { PostService } from './post.service';
 
 @Resolver((of) => Post)
 export class PostResolver {
-	constructor(private userService: UserService, private postService: PostService) {}
+	constructor(
+		private userService: UserService,
+		private postService: PostService,
+		private commentService: CommentService
+	) {}
 
 	@UseGuards(AuthGuard)
 	@Query((returns) => Post)
@@ -91,5 +97,12 @@ export class PostResolver {
 	@ResolveField((returns) => Int)
 	async likeCount(@Parent() post: Post): Promise<number> {
 		return post.likes.length;
+	}
+
+	@ResolveField((returns) => [
+		PostComment
+	])
+	async comments(@Parent() post: Post): Promise<PostComment[]> {
+		return this.commentService.getCommentsOfPost(post.id);
 	}
 }

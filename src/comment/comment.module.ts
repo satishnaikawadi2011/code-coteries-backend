@@ -1,5 +1,5 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CommentResolver } from './comment.resolver';
 import { PostComment } from './entities/post-comment.entity';
@@ -18,7 +18,7 @@ import { JwtModule } from '@nestjs/jwt';
 			]),
 			EventModule,
 			UserModule,
-			PostModule,
+			forwardRef(() => PostModule),
 			JwtModule.register({
 				secret: 'thisismysecret',
 				signOptions: { expiresIn: '7d' }
@@ -28,6 +28,10 @@ import { JwtModule } from '@nestjs/jwt';
 		[
 			CommentService,
 			CommentResolver
+		],
+	exports:
+		[
+			CommentService
 		]
 })
 export class CommentModule {}

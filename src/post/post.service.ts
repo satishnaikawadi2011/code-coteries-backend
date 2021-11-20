@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostComment } from 'src/comment/entities/post-comment.entity';
+import { CommentResponse } from 'src/comment/types/comment-res';
 import { Tag } from 'src/tag/entities/tag.entity';
 import { TagService } from 'src/tag/tag.service';
 import { UserService } from 'src/user/user.service';
+import { CommentType } from 'src/utils/types';
 import { FindManyOptions, FindOneOptions, getManager, In, LessThan, Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './input/create-post.input';

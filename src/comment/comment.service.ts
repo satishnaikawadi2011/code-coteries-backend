@@ -229,6 +229,8 @@ export class CommentService {
 		}
 	}
 
+
+
 	//   reply to post
 	//   async replyToPost(
 	//     handle: string,
@@ -257,4 +259,30 @@ export class CommentService {
 	//       throw err;
 	//     }
 	//   }
+
+
+	//   get comments of particular post
+	async getCommentsOfPost(postId: string, limit = 10, skip = 0): Promise<PostComment[]> {
+		try {
+			const comments = await this.postCommRepo.find({
+				where:
+					{
+						post:
+							{
+								id: postId
+							}
+					},
+				take: limit,
+				skip,
+				order:
+					{
+						created_at: 'DESC',
+						likes: 'DESC'
+					}
+			});
+			return comments;
+		} catch (err) {
+			throw err;
+		}
+	}
 }

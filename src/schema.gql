@@ -192,10 +192,10 @@ type Mutation {
   deletePost(postId: String!): String!
   likePost(postId: String!): Post!
   createTag(createTagInput: CreateTagInput!): Tag!
-  createEvent(addEventInput: AddEventInput!): Event!
-  likeEvent(eventId: String!): Event!
   addComment(addCommentInput: AddCommentInput!): CommentResponse!
   likeComment(type: String!, commentId: String!): CommentResponse!
+  createEvent(addEventInput: AddEventInput!): Event!
+  likeEvent(eventId: String!): Event!
 }
 
 input CreateUserInput {
@@ -278,6 +278,12 @@ input CreateTagInput {
   description: String!
 }
 
+input AddCommentInput {
+  content: String!
+  commentType: String!
+  entityId: String!
+}
+
 input AddEventInput {
   title: String!
   description: String!
@@ -285,10 +291,4 @@ input AddEventInput {
   event_url: String!
   event_date: String!
   tagIds: [String!] = []
-}
-
-input AddCommentInput {
-  content: String!
-  commentType: String!
-  entityId: String!
 }
