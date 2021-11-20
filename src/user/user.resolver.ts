@@ -49,7 +49,6 @@ export class UserResolver {
 
 	@Mutation((returns) => AuthResponse)
 	async registerUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<AuthResponse> {
-		// console.log(createUserInput);
 		return this.authService.signup(createUserInput);
 	}
 
@@ -135,7 +134,7 @@ export class UserResolver {
 
 	@Mutation((returns) => User)
 	@UseGuards(AuthGuard)
-	async followUser(@Context('userId') myId: string, @Args('id') userId: string): Promise<User> {
+	async followUser(@Args('id') userId: string, @Context('userId') myId: string): Promise<User> {
 		const me = await this.usersService.findOne(myId, {
 			relations:
 				[
@@ -150,6 +149,9 @@ export class UserResolver {
 		});
 
 		const otherUser = await this.usersService.findOne(userId);
+		if (!otherUser) {
+			throw new BadRequestException('User not found !');
+		}
 
 		// if (me.connections)
 		if (!me.connections) {
@@ -160,7 +162,8 @@ export class UserResolver {
 		else {
 			me.connections.push(otherUser);
 		}
-		return this.usersService.save(me);
+		await this.usersService.save(me);
+		return otherUser;
 	}
 
 	@Mutation((returns) => String)
@@ -181,7 +184,7 @@ export class UserResolver {
 		const updatedConnections = me.connections.filter((conn) => conn.id !== userId);
 		me.connections = updatedConnections;
 		await this.usersService.save(me);
-		return 'Successfully unfollowed user !!';
+		return userId;
 	}
 
 	@Query((returns) => [

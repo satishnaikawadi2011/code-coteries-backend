@@ -160,10 +160,28 @@ export class UserService {
 		}
 	}
 
+	// remove post from user
+	async removePostFromUser(id: string, post: Post): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(User, 'posts').of(id).remove(post);
+		} catch (err) {
+			throw err;
+		}
+	}
+
 	// Save new event to user
 	async saveEventToUser(id: string, event: Event): Promise<void> {
 		try {
 			await this.repo.createQueryBuilder().relation(User, 'events').of(id).add(event);
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	// remove event from user
+	async removeEventFromUser(id: string, event: Event): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(User, 'events').of(id).remove(event);
 		} catch (err) {
 			throw err;
 		}

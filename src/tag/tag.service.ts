@@ -108,4 +108,13 @@ export class TagService {
 			throw err;
 		}
 	}
+
+	// remove post from tag
+	async removePostFromTag(id: string, post: Post): Promise<void> {
+		try {
+			await this.repo.createQueryBuilder().relation(Tag, 'posts').of(id).remove(post);
+		} catch (err) {
+			throw err;
+		}
+	}
 }

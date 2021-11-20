@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, BadRequestException } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Tag } from 'src/tag/entities/tag.entity';
@@ -46,6 +46,18 @@ export class PostResolver {
 		@Context('userId') userId: string
 	): Promise<Post> {
 		return this.postService.createPost(createPostInput, userId);
+	}
+
+	@UseGuards(AuthGuard)
+	@Mutation((returns) => String)
+	async deletePost(@Args('postId') postId: string, @Context('userId') userId: string): Promise<string> {
+		const post = await this.postService.getPostById(postId);
+		if (!post) {
+			throw new BadRequestException('Post not found !');
+		}
+		await this.userService.removePostFromUser(postId, post);
+		await this.postService.remove(postId);
+		return postId;
 	}
 
 	@UseGuards(AuthGuard)

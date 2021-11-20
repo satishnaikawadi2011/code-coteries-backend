@@ -182,6 +182,7 @@ type Mutation {
   editSocial(editSocialInput: EditSocialInput!): Social!
   editUserAvatar(url: String!): Profile!
   createPost(createPostInput: CreatePostInput!): Post!
+  deletePost(postId: String!): String!
   likePost(postId: String!): Post!
   createTag(createTagInput: CreateTagInput!): Tag!
   createEvent(addEventInput: AddEventInput!): Event!
