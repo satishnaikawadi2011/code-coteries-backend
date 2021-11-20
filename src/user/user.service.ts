@@ -4,7 +4,7 @@ import { EventComment } from 'src/comment/entities/event-comment.entity';
 import { PostComment } from 'src/comment/entities/post-comment.entity';
 import { Event } from 'src/event/entities/event.entity';
 import { Post } from 'src/post/entities/post.entity';
-import { Repository, getManager, FindOneOptions } from 'typeorm';
+import { Repository, getManager, FindOneOptions, In, MoreThan } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './inputs/create-user.input';
 import { UpdateUserInput } from './inputs/update-user.input';
@@ -126,6 +126,19 @@ export class UserService {
 		);
 
 		return followings;
+	}
+
+	async getSuggestedUsers(followerIds: string[], created_at: string, limit = 10) {
+		const users = await this.repo.find({
+			where:
+				[
+					{ id: In(followerIds) },
+					{ created_at: MoreThan(created_at) }
+				],
+			take: limit
+		});
+
+		return users;
 	}
 
 	async getMyProfile(id: string) {

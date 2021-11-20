@@ -148,6 +148,7 @@ type CommentResponse {
 
 type Query {
   me: User!
+  suggestUsers(suggestUsersInput: SuggestUsersInput!): [User!]!
   getMyProfile: Profile!
   getMyFollowers: [User!]!
   getMyFollowings: [User!]!
@@ -158,6 +159,12 @@ type Query {
   getAllTags: [Tag!]!
   getEvent(eventId: String!): Event!
   getEventsByTag(tagId: String!): [Event!]!
+}
+
+input SuggestUsersInput {
+  limit: Int
+  created_at: String!
+  followerIds: [String!] = []
 }
 
 type Mutation {

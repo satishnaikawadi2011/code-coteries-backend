@@ -22,11 +22,11 @@ export class AddExperienceInput {
 	@Field({ nullable: true })
 	@IsOptional()
 	@IsDateString()
-	to: string;
+	to?: string;
 
 	@Field({ defaultValue: false })
 	@IsBoolean()
-	current: boolean;
+	current?: boolean;
 
 	@Field()
 	@IsString()

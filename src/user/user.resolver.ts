@@ -10,6 +10,7 @@ import { AddEducationInput } from './inputs/add-education.input';
 import { CreateUserInput } from './inputs/create-user.input';
 import { EditProfileInput } from './inputs/edit-profile.input';
 import { SigninUserInput } from './inputs/signin-user.input';
+import { SuggestUsersInput } from './inputs/suggest-users.input';
 import { ProfileService } from './profile.service';
 import { AuthResponse } from './types/auth-response.type';
 import { UserService } from './user.service';
@@ -32,6 +33,18 @@ export class UserResolver {
 			throw new BadRequestException('user with given id not found!');
 		}
 		return user;
+	}
+
+	@Query((returns) => [
+		User
+	])
+	@UseGuards(AuthGuard)
+	async suggestUsers(
+		@Args('suggestUsersInput') suggestUsersInput: SuggestUsersInput,
+		@Context('userId') userId: string
+	): Promise<User[]> {
+		const { followerIds, created_at, limit } = suggestUsersInput;
+		return this.usersService.getSuggestedUsers(followerIds, created_at, limit);
 	}
 
 	@Mutation((returns) => AuthResponse)
