@@ -23,7 +23,7 @@ export class UserService {
 	}
 
 	create({ email, password, username, fullName }: CreateUserInput) {
-		const user = this.repo.create({ email, password, username, fullName });
+		const user = this.repo.create({ email, password, username, fullName, saved_posts: [] });
 		return this.repo.save(user);
 	}
 
@@ -223,5 +223,22 @@ export class UserService {
 		} catch (err) {
 			throw err;
 		}
+	}
+
+	async addPostToBookmark(postId: string, userId: string) {
+		const user = await this.repo.findOne(userId);
+		user.saved_posts = [
+			postId,
+			...user.saved_posts
+		];
+		await this.repo.save(user);
+		return postId;
+	}
+
+	async removePostFromBookmark(postId: string, userId: string) {
+		const user = await this.repo.findOne(userId);
+		user.saved_posts = user.saved_posts.filter((pid) => pid !== postId);
+		await this.repo.save(user);
+		return postId;
 	}
 }

@@ -183,6 +183,8 @@ input GetFeedInput {
 type Mutation {
   registerUser(createUserInput: CreateUserInput!): AuthResponse!
   signinUser(signinUserInput: SigninUserInput!): AuthResponse!
+  addPostToBookmark(postId: String!): String!
+  removePostFromBookmark(postId: String!): String!
   editProfile(editProfileInput: EditProfileInput!): Profile!
   addEducation(addEducationInput: AddEducationInput!): Education!
   followUser(id: String!): User!

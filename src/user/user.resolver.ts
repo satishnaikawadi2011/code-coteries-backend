@@ -69,6 +69,18 @@ export class UserResolver {
 		return this.authService.signin(signinUserInput);
 	}
 
+	@Mutation((returns) => String)
+	@UseGuards(AuthGuard)
+	async addPostToBookmark(@Args('postId') postId: string, @Context('userId') userId: string): Promise<string> {
+		return this.usersService.addPostToBookmark(postId, userId);
+	}
+
+	@Mutation((returns) => String)
+	@UseGuards(AuthGuard)
+	async removePostFromBookmark(@Args('postId') postId: string, @Context('userId') userId: string): Promise<string> {
+		return this.usersService.removePostFromBookmark(postId, userId);
+	}
+
 	@Mutation((returns) => Profile)
 	@UseGuards(AuthGuard)
 	async editProfile(
