@@ -1,3 +1,4 @@
+import { DEFAULT_USER_AVATAR } from './../../constants/index';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from '../../user/entities/user.entity';
 import {
@@ -62,6 +63,10 @@ export class Post {
 	@Field()
 	@Column()
 	handle: string;
+
+	@Field()
+	@Column({ default: DEFAULT_USER_AVATAR })
+	avatar_url: string;
 
 	@Field() likeCount: number;
 

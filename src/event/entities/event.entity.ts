@@ -14,6 +14,7 @@ import {
 } from 'typeorm';
 import { EventComment } from 'src/comment/entities/event-comment.entity';
 import { Tag } from 'src/tag/entities/tag.entity';
+import { DEFAULT_USER_AVATAR } from 'src/constants';
 
 @ObjectType()
 @Entity()
@@ -72,6 +73,14 @@ export class Event {
 	likes: string[];
 
 	@Field() likeCount: number;
+
+	@Field()
+	@Column()
+	handle: string;
+
+	@Field()
+	@Column({ default: DEFAULT_USER_AVATAR })
+	avatar_url: string;
 
 	@Field(
 		(type) => [

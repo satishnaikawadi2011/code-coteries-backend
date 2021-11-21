@@ -112,7 +112,7 @@ export class EventService {
 				throw new BadRequestException('Event with this event_url already exists !!');
 			}
 
-			const user = await this.userService.findOne(userId);
+			const user = await this.userService.findOne(userId,{relations:['profile']});
 			const insertResult = await this.repo
 				.createQueryBuilder()
 				.insert()
@@ -121,6 +121,8 @@ export class EventService {
 					{
 						likes: [],
 						user,
+						handle: user.username,
+						avatar_url:user.profile?.image_url,
 						image_url,
 						description,
 						event_url,

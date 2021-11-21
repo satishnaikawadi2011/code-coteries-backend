@@ -119,7 +119,7 @@ export class PostService {
 	async createPost({ caption, image_url, tagIds }: CreatePostInput, userId: string): Promise<Post> {
 		try {
 			// Find user by id
-			const user = await this.userService.findOne(userId);
+			const user = await this.userService.findOne(userId,{relations:['profile']});
 			const insertResult = await this.repo
 				.createQueryBuilder()
 				.insert()
@@ -127,6 +127,7 @@ export class PostService {
 				.values([
 					{
 						handle: user.username,
+						avatar_url:user.profile?.image_url,
 						likes: [],
 						user,
 						caption,

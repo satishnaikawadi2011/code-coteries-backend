@@ -55,6 +55,12 @@ export class User {
 	@UpdateDateColumn()
 	updated_at: Date;
 
+	@Field((type) => [
+		String
+	])
+	@Column({ type: 'simple-array', default: [] })
+	saved_posts: string[];
+
 	@Field((type) => Profile, { nullable: true })
 	@OneToOne(() => Profile)
 	@JoinColumn()
