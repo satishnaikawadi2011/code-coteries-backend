@@ -88,6 +88,8 @@ type Event {
   comments: [EventComment!]
   likes: [String!]!
   likeCount: Float!
+  handle: String!
+  avatar_url: String!
   tags: [Tag!]
 }
 
@@ -113,6 +115,7 @@ type Post {
   comments(lastTimestamp: String, limit: Float = 10): [PostComment!]
   likes: [String!]!
   handle: String!
+  avatar_url: String!
   likeCount: Float!
   commentCount: Float!
   tags: [Tag!]
@@ -127,6 +130,7 @@ type User {
   is_admin: Boolean!
   created_at: DateTime!
   updated_at: DateTime!
+  saved_posts: [String!]!
   profile: Profile
   connections: [User!]
   events: [Event!]

@@ -58,7 +58,7 @@ export class User {
 	@Field((type) => [
 		String
 	])
-	@Column({ type: 'simple-array', default: [] })
+	@Column({ type: 'simple-array' })
 	saved_posts: string[];
 
 	@Field((type) => Profile, { nullable: true })
