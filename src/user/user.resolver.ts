@@ -47,6 +47,18 @@ export class UserResolver {
 		return this.usersService.getSuggestedUsers(followerIds, created_at, limit);
 	}
 
+	@Query((returns) => [
+		User
+	])
+	@UseGuards(AuthGuard)
+	async searchUsers(
+		@Args('query') query: string,
+		@Args('limit', { nullable: true })
+		limit?: number
+	): Promise<User[]> {
+		return this.usersService.searchUsers(query, limit);
+	}
+
 	@Mutation((returns) => AuthResponse)
 	async registerUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<AuthResponse> {
 		return this.authService.signup(createUserInput);

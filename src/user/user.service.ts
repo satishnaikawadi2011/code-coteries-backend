@@ -4,7 +4,7 @@ import { EventComment } from 'src/comment/entities/event-comment.entity';
 import { PostComment } from 'src/comment/entities/post-comment.entity';
 import { Event } from 'src/event/entities/event.entity';
 import { Post } from 'src/post/entities/post.entity';
-import { Repository, getManager, FindOneOptions, In, MoreThan } from 'typeorm';
+import { Repository, getManager, FindOneOptions, In, MoreThan, Like } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './inputs/create-user.input';
 import { UpdateUserInput } from './inputs/update-user.input';
@@ -200,6 +200,26 @@ export class UserService {
 	async savePostCommToUser(id: string, comment: PostComment): Promise<void> {
 		try {
 			await this.repo.createQueryBuilder().relation(User, 'post_comments').of(id).add(comment);
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	// search users with given query by name or username
+	async searchUsers(query: string, limit?: number): Promise<User[]> {
+		try {
+			const users = await this.repo.find({
+				where:
+					[
+						{ username: Like(`%${query}%`) },
+						{ fullName: Like(`%${query}%`) }
+					],
+				take:
+
+						limit ? limit :
+						10
+			});
+			return users;
 		} catch (err) {
 			throw err;
 		}

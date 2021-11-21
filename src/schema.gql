@@ -150,6 +150,7 @@ type CommentResponse {
 type Query {
   me: User!
   suggestUsers(suggestUsersInput: SuggestUsersInput!): [User!]!
+  searchUsers(limit: Float, query: String!): [User!]!
   getMyProfile: Profile!
   getMyFollowers: [User!]!
   getMyFollowings: [User!]!
