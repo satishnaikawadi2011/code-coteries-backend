@@ -44,6 +44,7 @@ export class PostResolver {
 	])
 	async getFeed(@Args('getFeedInput') getFeedInput: GetFeedInput): Promise<Post[]> {
 		const { feedIds, lastTimestamp, limit } = getFeedInput;
+		console.log(getFeedInput);
 		return this.postService.getFeed(limit, feedIds, lastTimestamp);
 	}
 

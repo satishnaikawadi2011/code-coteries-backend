@@ -109,8 +109,8 @@ type Post {
   id: String!
   caption: String!
   image_url: String!
-  created_at: DateTime!
-  updated_at: DateTime!
+  created_at: String!
+  updated_at: String!
   user: User!
   comments(lastTimestamp: String, limit: Float = 10): [PostComment!]
   likes: [String!]!
@@ -176,7 +176,7 @@ input SuggestUsersInput {
 
 input GetFeedInput {
   limit: Int
-  lastTimestamp: String!
+  lastTimestamp: String
   feedIds: [String!] = []
 }
 

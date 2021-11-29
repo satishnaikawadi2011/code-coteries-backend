@@ -6,9 +6,9 @@ export class GetFeedInput {
 	@Field((type) => Int, { nullable: true })
 	limit?: number | undefined;
 
-	@Field()
-	@IsDateString()
-	lastTimestamp: string;
+	@Field((type) => String, { nullable: true })
+	// @IsDateString()
+	lastTimestamp?: string;
 
 	@IsString({ each: true })
 	@Field((type) => [

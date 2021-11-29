@@ -5,13 +5,15 @@ import { UserService } from './user.service';
 import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { AuthResponse } from './types/auth-response.type';
+import { ProfileService } from './profile.service';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		@Inject(forwardRef(() => UserService))
 		private usersService: UserService,
-		private jwtService: JwtService
+		private jwtService: JwtService,
+		private profileService: ProfileService
 	) {}
 
 	async signup({ email, password, username, fullName }: CreateUserInput): Promise<AuthResponse> {
@@ -21,6 +23,9 @@ export class AuthService {
 		}
 		const hashedPassword = await argon2.hash(password);
 		const user = await this.usersService.create({ email, password: hashedPassword, username, fullName });
+		const profile = await this.profileService.create({});
+		user.profile = profile;
+		this.usersService.save(user);
 		const token = await this.jwtService.signAsync({ id: user.id });
 		return { user, token };
 	}

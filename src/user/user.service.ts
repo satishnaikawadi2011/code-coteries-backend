@@ -4,7 +4,7 @@ import { EventComment } from 'src/comment/entities/event-comment.entity';
 import { PostComment } from 'src/comment/entities/post-comment.entity';
 import { Event } from 'src/event/entities/event.entity';
 import { Post } from 'src/post/entities/post.entity';
-import { Repository, getManager, FindOneOptions, In, MoreThan, Like } from 'typeorm';
+import { Repository, getManager, FindOneOptions, In, MoreThan, Like, Not } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './inputs/create-user.input';
 import { UpdateUserInput } from './inputs/update-user.input';
@@ -128,7 +128,7 @@ export class UserService {
 		return followings;
 	}
 
-	async getSuggestedUsers(followerIds: string[], created_at: string, limit = 10) {
+	async getSuggestedUsers(followerIds: string[], created_at: string, userId: string, limit = 10) {
 		const users = await this.repo.find({
 			where:
 				[
@@ -138,7 +138,25 @@ export class UserService {
 			take: limit
 		});
 
-		return users;
+		const ids = [
+			...users.map((u) => u.id),
+			userId
+		];
+		let randomUsers = [];
+		if (users.length < limit) {
+			randomUsers = await this.repo.find({
+				where:
+					[
+						{ id: Not(In(ids)) }
+					],
+				take: limit - users.length
+			});
+		}
+
+		return [
+			...users,
+			...randomUsers
+		];
 	}
 
 	async getMyProfile(id: string) {

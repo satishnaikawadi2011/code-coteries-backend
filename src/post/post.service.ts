@@ -82,23 +82,32 @@ export class PostService {
 
 	// get feed posts
 	async getFeed(limit: number, feedIds: string[], lastTimestamp?: string) {
-		const posts = await this.repo.find({
-			where:
-				{
-					user:
-						{
-							id: In(feedIds)
-						},
-					created_at: LessThan(lastTimestamp)
-				},
-			take: limit,
-			order:
-				{
-					created_at: 'DESC'
-				}
-		});
+		const l = limit ? limit : 10;
+		let p = [];
+		if (lastTimestamp) {
+		 p = await this.runRawQuery(`
+			SELECT * FROM post
+			WHERE userId IN (?) AND created_at < ?
+			ORDER BY created_at DESC
+			LIMIT ?
 
-		return posts;
+		`, [feedIds,lastTimestamp,l]);
+		} else {
+		 p = await this.runRawQuery(`
+			SELECT * FROM post
+			WHERE userId IN (?)
+			ORDER BY created_at DESC
+			LIMIT ?
+
+		`, [feedIds,l]);	
+		}
+
+		return p.map(post => {
+			return {
+				...post,
+				likes:post.likes === ''?[]:post.likes
+			}
+		});
 	}
 
 	//   Get post by postId

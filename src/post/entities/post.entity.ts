@@ -31,11 +31,11 @@ export class Post {
 	@Column()
 	image_url: string;
 
-	@Field()
+	@Field((type) => String)
 	@CreateDateColumn()
 	created_at: Date;
 
-	@Field()
+	@Field((type) => String)
 	@UpdateDateColumn()
 	updated_at: Date;
 

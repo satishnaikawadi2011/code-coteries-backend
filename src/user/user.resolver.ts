@@ -44,7 +44,7 @@ export class UserResolver {
 		@Context('userId') userId: string
 	): Promise<User[]> {
 		const { followerIds, created_at, limit } = suggestUsersInput;
-		return this.usersService.getSuggestedUsers(followerIds, created_at, limit);
+		return this.usersService.getSuggestedUsers(followerIds, created_at, userId, limit);
 	}
 
 	@Query((returns) => [
@@ -114,16 +114,7 @@ export class UserResolver {
 					'profile'
 				]
 		});
-		let profile;
-		if (!user.profile) {
-			profile = await this.profileService.create({});
-			user.profile = profile;
-			this.usersService.save(user);
-		}
-		else {
-			profile = user.profile;
-		}
-		// console.log('==============Profile============', profile);
+		const profile = user.profile;
 		return profile;
 	}
 
