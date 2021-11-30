@@ -80,6 +80,11 @@ export class PostService {
 		}
 	}
 
+			
+	 transformToArray = (likes: string) => {
+			return likes.split(',');
+		}
+
 	// get feed posts
 	async getFeed(limit: number, feedIds: string[], lastTimestamp?: string) {
 		const l = limit ? limit : 10;
@@ -102,10 +107,34 @@ export class PostService {
 		`, [feedIds,l]);	
 		}
 
+		// if (p[0]) {
+		// 	console.log(p);
+		// }
+
 		return p.map(post => {
 			return {
 				...post,
-				likes:post.likes === ''?[]:post.likes
+				likes:post.likes === ''?[]:this.transformToArray(post.likes)
+			}
+		});
+	}
+
+	//  get more posts from user
+	async getMorePostsFromUser(userId:string,postId:string,limit?:number) {
+		const l = limit ? limit : 10;
+		let p = [];
+		 p = await this.runRawQuery(`
+			SELECT * FROM post
+			WHERE userId = ? AND id <> ?
+			ORDER BY created_at DESC
+			LIMIT ?
+
+		`, [userId, postId, l]);
+
+		return p.map(post => {
+			return {
+				...post,
+				likes:post.likes === ''?[]:this.transformToArray(post.likes)
 			}
 		});
 	}

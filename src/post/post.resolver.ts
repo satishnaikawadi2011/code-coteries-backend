@@ -48,6 +48,19 @@ export class PostResolver {
 		return this.postService.getFeed(limit, feedIds, lastTimestamp);
 	}
 
+	@UseGuards(AuthGuard)
+	@Query((returns) => [
+		Post
+	])
+	async getMorePostsFromUser(
+		@Args('postId') postId: string,
+		@Args('userId') userId: string,
+		@Args('limit', { nullable: true })
+		limit?: number
+	): Promise<Post[]> {
+		return this.postService.getMorePostsFromUser(userId, postId, limit);
+	}
+
 	// @UseGuards(AuthGuard)
 	@Query((returns) => [
 		Post

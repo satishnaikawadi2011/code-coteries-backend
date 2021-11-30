@@ -86,56 +86,6 @@ export class CommentService {
 		}
 		return savedComm;
 	}
-
-	//     async getAllPosts(skip = 0, take = 10): Promise<Post[]> {
-	//     try {
-	//       return await this.repo
-	//         .createQueryBuilder('post')
-	//         .leftJoinAndSelect('post.replies', 'replies')
-	//         .orderBy('post.createdDate', 'DESC')
-	//         .skip(skip)
-	//         .take(take)
-	//         .getMany();
-	//     } catch (err) {
-	//       throw err;
-	//     }
-	//   }
-
-	//   Get posts by handle; with pagination
-	//   async getPostsByHandle(handle: string, skip = 0, take = 10): Promise<Post[]> {
-	//     try {
-	//       return await this.repo
-	//         .createQueryBuilder('post')
-	//         .where('handle = :handle', { handle })
-	//         .orderBy('post.createdDate', 'DESC')
-	//         .skip(skip)
-	//         .take(take)
-	//         .getMany();
-	//     } catch (err) {
-	//       throw err;
-	//     }
-	//   }
-
-	//   Get posts by topic w/ pagination
-	//   async getPostsByTopic(topic: string, skip = 0, take = 10): Promise<Post[]> {
-	//     try {
-	//       return await this.repo
-	//         .createQueryBuilder('post')
-	//         .where('topic = :topic', { topic })
-	//         .orderBy('post.createdDate', 'DESC')
-	//         .skip(skip)
-	//         .take(take)
-	//         .getMany();
-	//     } catch (err) {
-	//       throw err;
-	//     }
-	//   }
-
-	// Get trending data
-	// select topic
-	// from "Post"
-	// where "createdDate" > now() - interval '1 hour'
-
 	//   Create a new post
 	async createComment({ commentType, content, entityId }: AddCommentInput, userId: string): Promise<CommentResponse> {
 		let res: CommentResponse;
@@ -231,57 +181,34 @@ export class CommentService {
 
 
 
-	//   reply to post
-	//   async replyToPost(
-	//     handle: string,
-	//     text: string,
-	//     postId: string,
-	//   ): Promise<Post> {
-	//     try {
-	//       // Get post to reply to
-	//       const post = await this.repo
-	//         .createQueryBuilder('post')
-	//         .leftJoinAndSelect('post.replies', 'reply')
-	//         .where('post.id = :id', { id: postId })
-	//         .getOne();
-	//       // insert new reply and return reply id
-	//       const result: InsertResult = await this.replyRepository
-	//         .createQueryBuilder()
-	//         .insert()
-	//         .into(Reply)
-	//         .values([{ handle, text, post }])
-	//         .execute();
-	//       // return new reply and add to post
-	//       const reply = await this.replyRepository.findOne(result.identifiers[0]);
-	//       post.replies = [...post.replies, reply];
-	//       return await this.repo.save(post);
-	//     } catch (err) {
-	//       throw err;
-	//     }
-	//   }
-
-
+	
 	//   get comments of particular post
 	async getCommentsOfPost(postId: string, limit?:number,lastTimestamp?: string,skip?:number): Promise<PostComment[]> {
 		try {
-			const comments = await this.postCommRepo.find({
-				where:
-					{
-						post:
-							{
-								id: postId
-					},
-						created_at: LessThan(lastTimestamp)
-					},
-				take: limit ? limit : 10,
-				skip:skip?skip:0,
-				order:
-					{
-						created_at: 'DESC',
-						likes: 'DESC'
+			const l = limit ? limit : 10;
+			let c = [];
+			if (lastTimestamp) {
+			 c = await this.runRawQuery(`
+			SELECT * FROM post_comments
+			WHERE postId = ? AND created_at < ?
+			ORDER BY created_at DESC
+			LIMIT ?
+			`,[postId,lastTimestamp,l])
+			} else {
+				 c = await this.runRawQuery(`
+			SELECT * FROM post_comments
+			WHERE postId = ?
+			ORDER BY created_at DESC
+			LIMIT ?
+			`,[postId,l])
+			}
+			
+			return c.map(com => {
+				return {
+					...com,
+					likes: com.likes === '' ? [] : com.likes.split(',')
 				}
 			});
-			return comments;
 		} catch (err) {
 			throw err;
 		}
@@ -303,5 +230,14 @@ export class CommentService {
 		} catch (err) {
 			throw err;
 		}
+	}
+
+	async getUserOfComment(handle: string) {
+		const user = await this.runRawQuery(`
+		SELECT * FROM user
+		WHERE username = ?
+		`,[handle])
+		// console.log(user);
+		return user[0];
 	}
 }

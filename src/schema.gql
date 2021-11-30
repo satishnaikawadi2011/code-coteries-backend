@@ -57,8 +57,8 @@ type PostComment {
   id: String!
   content: String!
   handle: String!
-  created_at: DateTime!
-  updated_at: DateTime!
+  created_at: String!
+  updated_at: String!
   likes: [String!]!
   user: User!
   post: Post!
@@ -68,8 +68,8 @@ type EventComment {
   id: String!
   content: String!
   handle: String!
-  created_at: DateTime!
-  updated_at: DateTime!
+  created_at: String!
+  updated_at: String!
   likes: [String!]!
   user: User!
   event: Event!
@@ -162,6 +162,7 @@ type Query {
   getPost(postId: String!): Post!
   getAllPosts(take: Float, skip: Float): [Post!]!
   getFeed(getFeedInput: GetFeedInput!): [Post!]!
+  getMorePostsFromUser(limit: Float, userId: String!, postId: String!): [Post!]!
   getPostsByTag(tagId: String!): [Post!]!
   getAllTags: [Tag!]!
   getEvent(eventId: String!): Event!
